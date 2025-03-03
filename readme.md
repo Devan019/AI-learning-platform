@@ -1,3 +1,10 @@
+# Team
+
+1. Devan Chauhan - [GitHub](https://github.com/Devan019)
+2. Hasan Ravda - [GitHub](https://github.com/hasanravda)
+3. Chintan Bhutiya - [GitHub](https://github.com/chintanbhai)
+4. Soneirsinh Jadeja - [GitHub](https://github.com/SoneirsinhJadeja)
+
 # AI Learning Platform
 
 Welcome to the AI Learning Platform! This project is designed to provide an interactive and engaging learning experience for users interested in artificial intelligence. The platform offers various courses, quizzes, and a chatbot to assist users in their learning journey.
@@ -185,6 +192,3 @@ To get started with the AI Learning Platform, follow these steps:
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-## License
-
-This project is licensed under the MIT License.
