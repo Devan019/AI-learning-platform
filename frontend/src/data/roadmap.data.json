@@ -1,0 +1,546 @@
+{
+  "roadmaps": [
+    {
+      "title": "Full Stack Developer",
+      "description": "Learn frontend, backend, and database technologies.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRorq8k5h0wQPcdGnsBPrcPkcSNxolT3eNf5w&s",
+      "steps": [
+        {
+          "name": "Step 1: Learn HTML & CSS",
+          "details": "Understand HTML structure and CSS styling techniques.",
+          "topics": [
+            "HTML5",
+            "CSS3",
+            "Flexbox",
+            "Grid",
+            "Responsive Design"
+          ],
+          "prerequisites": [],
+          "image": "/images/html-css.png",
+          "substeps": [
+            "Understand semantic HTML elements",
+            "Master CSS box model and positioning",
+            "Work with Flexbox and CSS Grid",
+            "Create responsive layouts using media queries"
+          ]
+        },
+        {
+          "name": "Step 2: JavaScript Basics",
+          "details": "Learn JavaScript fundamentals for interactive web applications.",
+          "topics": [
+            "ES6+",
+            "DOM Manipulation",
+            "Event Handling"
+          ],
+          "prerequisites": [
+            "HTML & CSS"
+          ],
+          "image": "/images/javascript.png",
+          "substeps": [
+            "Learn ES6+ syntax (let, const, arrow functions)",
+            "Understand DOM manipulation and events",
+            "Work with asynchronous JavaScript (Promises, async/await)"
+          ]
+        },
+        {
+          "name": "Step 3: Version Control with Git & GitHub",
+          "details": "Manage code efficiently with Git and collaborate using GitHub.",
+          "topics": [
+            "Git Basics",
+            "GitHub",
+            "Branching",
+            "Merging",
+            "Pull Requests"
+          ],
+          "prerequisites": [
+            "JavaScript Basics"
+          ],
+          "image": "/images/git.png",
+          "substeps": [
+            "Install Git and set up GitHub",
+            "Learn basic Git commands (init, clone, commit, push, pull)",
+            "Understand branching and merging",
+            "Work with GitHub repositories and pull requests"
+          ]
+        },
+        {
+          "name": "Step 4: Advanced JavaScript & TypeScript",
+          "details": "Deep dive into JavaScript and learn TypeScript.",
+          "topics": [
+            "Closures",
+            "Prototypes",
+            "OOP in JS",
+            "TypeScript"
+          ],
+          "prerequisites": [
+            "JavaScript Basics"
+          ],
+          "image": "/images/advanced-js.png",
+          "substeps": [
+            "Understand closures and prototype inheritance",
+            "Learn Object-Oriented Programming (OOP) in JavaScript",
+            "Get started with TypeScript and static typing",
+            "Work with TypeScript interfaces and generics"
+          ]
+        },
+        {
+          "name": "Step 5: Frontend Framework (React.js)",
+          "details": "Learn to build dynamic web applications using React.js.",
+          "topics": [
+            "React Basics",
+            "Components",
+            "State Management",
+            "Hooks"
+          ],
+          "prerequisites": [
+            "Advanced JavaScript"
+          ],
+          "image": "/images/react.png",
+          "substeps": [
+            "Understand React component structure",
+            "Work with props and state",
+            "Use React hooks (useState, useEffect, useContext)",
+            "Learn React Router for navigation"
+          ]
+        },
+        {
+          "name": "Step 6: Styling Frameworks & UI Libraries",
+          "details": "Use CSS frameworks and libraries for better UI design.",
+          "topics": [
+            "Bootstrap",
+            "Tailwind CSS",
+            "Material UI"
+          ],
+          "prerequisites": [
+            "HTML & CSS",
+            "React.js"
+          ],
+          "image": "/images/css-frameworks.png",
+          "substeps": [
+            "Explore Bootstrap components and layout system",
+            "Learn Tailwind CSS utility classes",
+            "Use Material UI for building modern UIs"
+          ]
+        },
+        {
+          "name": "Step 7: Backend Basics with Node.js & Express",
+          "details": "Learn backend development using Node.js and Express.",
+          "topics": [
+            "Node.js",
+            "Express.js",
+            "REST APIs"
+          ],
+          "prerequisites": [
+            "JavaScript Basics"
+          ],
+          "image": "/images/node.png",
+          "substeps": [
+            "Understand how Node.js works",
+            "Set up Express.js and create a simple server",
+            "Build RESTful APIs with Express",
+            "Use middleware for request handling"
+          ]
+        },
+        {
+          "name": "Step 8: Database Management (MongoDB & SQL)",
+          "details": "Learn about databases and how to interact with them.",
+          "topics": [
+            "MongoDB",
+            "SQL",
+            "ORMs (Mongoose, Prisma)"
+          ],
+          "prerequisites": [
+            "Backend Basics"
+          ],
+          "image": "/images/database.png",
+          "substeps": [
+            "Understand NoSQL vs SQL databases",
+            "Perform CRUD operations with MongoDB",
+            "Use Mongoose for MongoDB schema management",
+            "Learn SQL queries and work with relational databases"
+          ]
+        },
+        {
+          "name": "Step 9: Authentication & Security",
+          "details": "Implement authentication and secure your applications.",
+          "topics": [
+            "JWT",
+            "OAuth",
+            "Cookies & Sessions"
+          ],
+          "prerequisites": [
+            "Backend Basics",
+            "Databases"
+          ],
+          "image": "/images/auth.png",
+          "substeps": [
+            "Implement user authentication with JWT",
+            "Work with OAuth for third-party authentication",
+            "Use cookies and sessions for user management",
+            "Learn about hashing and encryption"
+          ]
+        },
+        {
+          "name": "Step 10: Deployment & DevOps",
+          "details": "Deploy applications and manage cloud environments.",
+          "topics": [
+            "Vercel",
+            "Netlify",
+            "Docker",
+            "AWS"
+          ],
+          "prerequisites": [
+            "Full Stack Development"
+          ],
+          "image": "/images/deployment.png",
+          "substeps": [
+            "Deploy frontend applications with Vercel or Netlify",
+            "Deploy backend applications with Render or AWS",
+            "Use Docker for containerization",
+            "Understand CI/CD pipelines for automated deployments"
+          ]
+        }
+      ]
+    },{
+      "title": "Machine Learning Basics",
+      "description": "Learn the fundamental concepts of machine learning, including supervised and unsupervised learning techniques.",
+      "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBhUTBxIWFhUWFxobGBcYGRgbFRoiHR8ZKCAeHhcbHikkHyMxIh0dITEiJSktOi40IB82ODMsNygvOisBCgoKDg0OGhAQGi8dHx4tLS0vKy8tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0rLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEAAwADAQEAAAAAAAAAAAAABQYHAwQIAQL/xABFEAABAwMDAgQCBQcICwEAAAABAAIDBAURBhIhMUEHEyJRMmEUUnGBkRUjQlOCktEWJDM0c4OhsTVDYnKio7LBwtLhF//EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAHREBAQEBAAIDAQAAAAAAAAAAAAERAjFBEkJRE//aAAwDAQACEQMRAD8A3FERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEXHNPFTxF07g1o5JcQAPtJQciKp3DxJ0jQOxJVteeeImvl6fONpA+8qJPjDpfPpFQf7rH+bgrlTY0JFn8fjBpZzvX57R7mIkD90k/4KUrNe2gaTmrrSTOyIhpaA5h3EtADtzctHqBJweOeUymxbEVY0Bqz+V9ndM6LynMeWObu3NyADlrsDIwR24OVZ1FERfEH1Fm2m9M6oo/Eeaorp90DjIf6Uu3td8DPK/R2jHPbHGcrSUBERAREQEREBERAREQEREBERAREQERRGrL2zTunZql4BMbfS0nG5x4a373EBBXfEPxCptLDyaECWqIztPwRg9HPx/gwcn3A5WGXy+XS/wBRvvEzpOchpP5tv+7GPSPwz7krqVVTPW1T5axxdI9xc9x6knr/APB2GB2XEu3POOHXVoiItMC0Xwfne2O4sDBMPo24QO5ZIR5npLcHOeGng9Qs6XbtVzrrPXtmtkhjkbkBwx0PUEHgg+x+XcBSzY1zcrXbH4mUtvtjYxZ6qLGfRTwNEIySfTnb9p9I5yrJpXX9FqS7mnZT1EMgYX4ma1uQCB0Die46rP8AS2rvEDU1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",
+      "steps": [
+        {
+          "name": "Step 1: Introduction to Machine Learning",
+          "details": "Understand what machine learning is and its real-world applications.",
+          "topics": [
+            "Types of ML",
+            "Supervised vs Unsupervised Learning",
+            "ML Applications"
+          ],
+          "prerequisites": [],
+          "image": "/images/ml-intro.png",
+          "substeps": [
+            "Understand the difference between AI, ML, and Deep Learning",
+            "Explore real-world applications of ML",
+            "Learn about data-driven decision-making"
+          ]
+        },
+        {
+          "name": "Step 2: Supervised Learning",
+          "details": "Learn about algorithms used for supervised learning, including regression and classification models.",
+          "topics": [
+            "Linear Regression",
+            "Decision Trees",
+            "SVM"
+          ],
+          "prerequisites": [
+            "Basic Python",
+            "Statistics"
+          ],
+          "image": "/images/supervised-learning.png",
+          "substeps": [
+            "Understand how supervised learning works",
+            "Implement Linear Regression using Python",
+            "Learn about Decision Trees and Support Vector Machines (SVM)"
+          ]
+        },
+        {
+          "name": "Step 3: Unsupervised Learning",
+          "details": "Explore techniques for finding patterns in data without labeled outputs.",
+          "topics": [
+            "K-Means Clustering",
+            "PCA"
+          ],
+          "prerequisites": [
+            "Basic Python",
+            "Supervised Learning"
+          ],
+          "image": "/images/unsupervised-learning.png",
+          "substeps": [
+            "Understand the concept of clustering",
+            "Implement K-Means Clustering",
+            "Learn about Principal Component Analysis (PCA)"
+          ]
+        },
+        {
+          "name": "Step 4: Model Evaluation & Optimization",
+          "details": "Learn how to evaluate machine learning models and improve their performance.",
+          "topics": [
+            "Bias-Variance Tradeoff",
+            "Cross-Validation",
+            "Hyperparameter Tuning"
+          ],
+          "prerequisites": [
+            "Supervised Learning",
+            "Unsupervised Learning"
+          ],
+          "image": "/images/model-evaluation.png",
+          "substeps": [
+            "Understand how to measure model accuracy",
+            "Learn about overfitting and underfitting",
+            "Use cross-validation for model evaluation",
+            "Optimize models using hyperparameter tuning"
+          ]
+        },
+        {
+          "name": "Step 5: Real-World ML Applications",
+          "details": "Apply your knowledge to build real-world machine learning projects.",
+          "topics": [
+            "End-to-End ML Pipeline",
+            "ML Deployment"
+          ],
+          "prerequisites": [
+            "Model Evaluation & Optimization"
+          ],
+          "image": "/images/ml-projects.png",
+          "substeps": [
+            "Collect and preprocess data for a project",
+            "Train and evaluate an ML model",
+            "Deploy a machine learning model using Flask or FastAPI"
+          ]
+        },
+        {
+          "name": "Step 6: Feature Engineering",
+          "details": "Learn techniques to improve model performance by selecting and transforming features.",
+          "topics": [
+            "Feature Scaling",
+            "One-Hot Encoding",
+            "Dimensionality Reduction"
+          ],
+          "prerequisites": [
+            "Supervised Learning",
+            "Unsupervised Learning"
+          ],
+          "image": "/images/feature-engineering.png",
+          "substeps": [
+            "Understand feature scaling techniques (Normalization, Standardization)",
+            "Use one-hot encoding for categorical variables",
+            "Apply dimensionality reduction methods like PCA"
+          ]
+        },
+        {
+          "name": "Step 7: Introduction to Deep Learning",
+          "details": "Understand the basics of deep learning and neural networks.",
+          "topics": [
+            "Neural Networks",
+            "Activation Functions",
+            "Gradient Descent"
+          ],
+          "prerequisites": [
+            "Supervised Learning"
+          ],
+          "image": "/images/deep-learning.png",
+          "substeps": [
+            "Understand the architecture of neural networks",
+            "Learn about activation functions (ReLU, Sigmoid, Softmax)",
+            "Implement a simple neural network using TensorFlow/Keras"
+          ]
+        },
+        {
+          "name": "Step 8: Natural Language Processing (NLP) Basics",
+          "details": "Explore techniques for processing and analyzing text data.",
+          "topics": [
+            "Text Preprocessing",
+            "TF-IDF",
+            "Word Embeddings"
+          ],
+          "prerequisites": [
+            "Supervised Learning",
+            "Feature Engineering"
+          ],
+          "image": "/images/nlp.png",
+          "substeps": [
+            "Understand tokenization and stopword removal",
+            "Use TF-IDF to extract important words",
+            "Implement word embeddings using Word2Vec or GloVe"
+          ]
+        },
+        {
+          "name": "Step 9: Time Series Analysis",
+          "details": "Learn how to work with time series data for forecasting.",
+          "topics": [
+            "ARIMA",
+            "LSTMs for Time Series",
+            "Feature Engineering for Time Series"
+          ],
+          "prerequisites": [
+            "Supervised Learning",
+            "Deep Learning"
+          ],
+          "image": "/images/time-series.png",
+          "substeps": [
+            "Understand how time series data is structured",
+            "Implement ARIMA for forecasting",
+            "Use LSTMs for time series prediction"
+          ]
+        },
+        {
+          "name": "Step 10: Machine Learning in Production",
+          "details": "Learn best practices for deploying ML models into production environments.",
+          "topics": [
+            "MLOps",
+            "Model Monitoring",
+            "Scaling"
+          ],
+          "prerequisites": [
+            "Real-World ML Applications"
+          ],
+          "image": "/images/mlops.png",
+          "substeps": [
+            "Understand MLOps and CI/CD for ML",
+            "Learn how to monitor model performance over time",
+            "Scale ML models using cloud platforms like AWS or GCP"
+          ]
+        }
+      ]
+    },{
+      "title": "Game Deployment Roadmap",
+      "description": "Learn how to deploy games across different platforms.",
+      "image": "data:image/jpeg;base64,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",
+      "steps": [
+        {
+          "name": "Step 1: Choose a Game Engine",
+          "details": "Select the right game engine for your project.",
+          "topics": [
+            "Unity",
+            "Unreal Engine",
+            "Godot"
+          ],
+          "prerequisites": [],
+          "image": "/images/game-engine.png",
+          "substeps": [
+            "Understand the capabilities of different game engines",
+            "Set up your development environment",
+            "Learn the basics of your chosen engine"
+          ]
+        },
+        {
+          "name": "Step 2: Optimize Game Performance",
+          "details": "Ensure your game runs smoothly before deployment.",
+          "topics": [
+            "FPS Optimization",
+            "Memory Management",
+            "Asset Compression"
+          ],
+          "prerequisites": [
+            "Game Development Basics"
+          ],
+          "image": "/images/game-optimization.png",
+          "substeps": [
+            "Profile your game for performance bottlenecks",
+            "Optimize graphics and assets",
+            "Reduce load times and improve efficiency"
+          ]
+        },
+        {
+          "name": "Step 3: Platform Selection",
+          "details": "Decide where to deploy your game (PC, Console, Mobile, Web).",
+          "topics": [
+            "Steam",
+            "Epic Games Store",
+            "PlayStation/Xbox/Nintendo",
+            "Google Play & App Store",
+            "WebGL & HTML5"
+          ],
+          "prerequisites": [
+            "Optimized Game Build"
+          ],
+          "image": "/images/platforms.png",
+          "substeps": [
+            "Understand the requirements of each platform",
+            "Choose the best platform based on your target audience",
+            "Adjust controls and UI for different devices"
+          ]
+        },
+        {
+          "name": "Step 4: Game Packaging & Builds",
+          "details": "Prepare your game for distribution.",
+          "topics": [
+            "Unity Build System",
+            "Unreal Engine Packaging",
+            "APK & IPA Generation",
+            "Executable Files (.exe, .app)"
+          ],
+          "prerequisites": [
+            "Platform Selection"
+          ],
+          "image": "/images/game-builds.png",
+          "substeps": [
+            "Configure build settings for different platforms",
+            "Generate the necessary files for deployment",
+            "Test builds on actual devices or emulators"
+          ]
+        },
+        {
+          "name": "Step 5: Cloud & Multiplayer Setup",
+          "details": "Integrate online services and multiplayer capabilities.",
+          "topics": [
+            "AWS/GCP/Azure",
+            "Photon & Mirror for Networking",
+            "Dedicated Game Servers"
+          ],
+          "prerequisites": [
+            "Basic Game Deployment"
+          ],
+          "image": "/images/game-cloud.png",
+          "substeps": [
+            "Set up backend services for leaderboards, authentication, and data storage",
+            "Implement real-time multiplayer features",
+            "Test networking latency and stability"
+          ]
+        },
+        {
+          "name": "Step 6: Testing & Debugging",
+          "details": "Ensure a bug-free experience before release.",
+          "topics": [
+            "Game Testing",
+            "Debugging Tools",
+            "Beta Testing"
+          ],
+          "prerequisites": [
+            "Playable Game Build"
+          ],
+          "image": "/images/game-testing.png",
+          "substeps": [
+            "Use debugging tools to identify issues",
+            "Perform beta testing with real users",
+            "Fix bugs and optimize performance"
+          ]
+        },
+        {
+          "name": "Step 7: Store Submission & Compliance",
+          "details": "Submit your game to distribution platforms.",
+          "topics": [
+            "Steamworks",
+            "App Store Guidelines",
+            "ESRB & PEGI Ratings"
+          ],
+          "prerequisites": [
+            "Bug-Free Game Build"
+          ],
+          "image": "/images/store-submission.png",
+          "substeps": [
+            "Prepare marketing assets (trailers, screenshots, descriptions)",
+            "Follow submission guidelines for each platform",
+            "Get necessary age ratings and approvals"
+          ]
+        },
+        {
+          "name": "Step 8: Game Deployment & Live Updates",
+          "details": "Deploy your game and manage updates post-launch.",
+          "topics": [
+            "Patch Management",
+            "DLC & Expansions",
+            "Live Service Models"
+          ],
+          "prerequisites": [
+            "Store Submission"
+          ],
+          "image": "/images/game-deployment.png",
+          "substeps": [
+            "Release the game on your chosen platform",
+            "Monitor feedback and fix post-launch issues",
+            "Plan and deploy content updates and patches"
+          ]
+        }
+      ]
+    }
+  ]
+}

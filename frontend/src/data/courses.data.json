@@ -1,0 +1,163 @@
+{
+  "courses": [
+    {
+      "course_name": "Full Stack Web Development",
+      "course_description": "Learn frontend and backend technologies to build full-stack applications.",
+      "total_modules": 3,
+      "modules": [
+        {
+          "module_name": "Frontend Development",
+          "topics": ["HTML", "CSS", "JavaScript", "React"]
+        },
+        {
+          "module_name": "Backend Development",
+          "topics": ["Node.js", "Express", "MongoDB"]
+        },
+        {
+          "module_name": "Deployment & DevOps",
+          "topics": ["Docker", "CI/CD", "AWS"]
+        }
+      ]
+    },
+    {
+      "course_name": "Machine Learning Basics",
+      "course_description": "Introduction to machine learning concepts and algorithms.",
+      "total_modules": 2,
+      "modules": [
+        {
+          "module_name": "Supervised Learning",
+          "topics": ["Linear Regression", "Decision Trees", "SVM"]
+        },
+        {
+          "module_name": "Unsupervised Learning",
+          "topics": ["K-Means Clustering", "PCA"]
+        }
+      ]
+    },
+    {
+      "course_name": "Cybersecurity Fundamentals",
+      "course_description": "Learn the basics of cybersecurity and ethical hacking techniques.",
+      "total_modules": 3,
+      "modules": [
+        {
+          "module_name": "Network Security",
+          "topics": ["Firewalls", "VPNs", "IDS/IPS"]
+        },
+        {
+          "module_name": "Ethical Hacking",
+          "topics": ["Penetration Testing", "Social Engineering", "Cryptography"]
+        },
+        {
+          "module_name": "Security Best Practices",
+          "topics": ["Risk Management", "Incident Response", "Compliance"]
+        }
+      ]
+    },
+    {
+      "course_name": "Data Science with Python",
+      "course_description": "Explore data analysis, visualization, and machine learning using Python.",
+      "total_modules": 3,
+      "modules": [
+        {
+          "module_name": "Data Analysis",
+          "topics": ["Pandas", "NumPy", "Matplotlib"]
+        },
+        {
+          "module_name": "Machine Learning with Python",
+          "topics": ["Scikit-Learn", "TensorFlow", "Keras"]
+        },
+        {
+          "module_name": "Big Data & Cloud Computing",
+          "topics": ["Apache Spark", "Google Cloud AI", "AWS ML Services"]
+        }
+      ]
+    },
+    {
+      "course_name": "Mobile App Development",
+      "course_description": "Learn to develop cross-platform mobile applications.",
+      "total_modules": 2,
+      "modules": [
+        {
+          "module_name": "Android Development",
+          "topics": ["Kotlin", "Jetpack Compose", "Firebase"]
+        },
+        {
+          "module_name": "iOS Development",
+          "topics": ["Swift", "SwiftUI", "Core Data"]
+        }
+      ]
+    },
+    {
+      "course_name": "Game Development",
+      "course_description": "Learn to create games using Unity and Unreal Engine.",
+      "total_modules": 3,
+      "modules": [
+        {
+          "module_name": "Game Design Basics",
+          "topics": ["Game Mechanics", "Level Design", "Storytelling"]
+        },
+        {
+          "module_name": "Unity Development",
+          "topics": ["C# Scripting", "Physics Engine", "AI in Games"]
+        },
+        {
+          "module_name": "Unreal Engine Development",
+          "topics": ["Blueprint Scripting", "Rendering Techniques", "Multiplayer Networking"]
+        }
+      ]
+    },
+    {
+      "course_name": "Blockchain Development",
+      "course_description": "Understand blockchain technology and develop decentralized applications (DApps).",
+      "total_modules": 3,
+      "modules": [
+        {
+          "module_name": "Blockchain Basics",
+          "topics": ["Cryptography", "Consensus Algorithms", "Smart Contracts"]
+        },
+        {
+          "module_name": "Ethereum & Solidity",
+          "topics": ["Solidity Programming", "ERC-20 Tokens", "NFTs"]
+        },
+        {
+          "module_name": "Decentralized Applications",
+          "topics": ["IPFS", "Web3.js", "DApp Security"]
+        }
+      ]
+    },
+    {
+      "course_name": "Cloud Computing",
+      "course_description": "Learn cloud platforms and services such as AWS, Azure, and Google Cloud.",
+      "total_modules": 3,
+      "modules": [
+        {
+          "module_name": "AWS Essentials",
+          "topics": ["EC2", "S3", "Lambda"]
+        },
+        {
+          "module_name": "Azure Fundamentals",
+          "topics": ["Virtual Machines", "Blob Storage", "Azure Functions"]
+        },
+        {
+          "module_name": "Google Cloud Platform",
+          "topics": ["Compute Engine", "Cloud Storage", "BigQuery"]
+        }
+      ]
+    },
+    {
+      "course_name": "Internet of Things (IoT)",
+      "course_description": "Explore IoT devices, sensors, and connectivity protocols.",
+      "total_modules": 2,
+      "modules": [
+        {
+          "module_name": "IoT Basics",
+          "topics": ["Sensors", "Microcontrollers", "Communication Protocols"]
+        },
+        {
+          "module_name": "IoT Cloud Integration",
+          "topics": ["IoT Hub", "Edge Computing", "Data Analytics"]
+        }
+      ]
+    }
+  ]
+}

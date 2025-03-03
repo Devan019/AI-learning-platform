@@ -1,0 +1,62 @@
+[
+  {
+    "mission_name": "Daily Login",
+    "mission_detail": "Log in daily to earn rewards.",
+    "mission_rewards": 50
+  },
+  {
+    "mission_name": "Complete 5 Challenges",
+    "mission_detail": "Finish any 5 challenges to receive a bonus.",
+    "mission_rewards": 200
+  },
+  {
+    "mission_name": "Invite a Friend",
+    "mission_detail": "Invite a friend to join and earn bonus coins.",
+    "mission_rewards": 100
+  },
+  {
+    "mission_name": "Win 3 Matches",
+    "mission_detail": "Win any 3 multiplayer matches.",
+    "mission_rewards": 150
+  },
+  {
+    "mission_name": "Complete One Project",
+    "mission_detail": "Submit a project to earn rewards.",
+    "mission_rewards": 300
+  },
+  {
+    "mission_name": "Complete 5 Projects",
+    "mission_detail": "Submit 5 projects and receive a big bonus!",
+    "mission_rewards": 1000
+  },
+  {
+    "mission_name": "Complete a Course",
+    "mission_detail": "Finish any course to unlock rewards.",
+    "mission_rewards": 500
+  },
+  {
+    "mission_name": "Share Your Profile",
+    "mission_detail": "Share your profile on social media.",
+    "mission_rewards": 200
+  },
+  {
+    "mission_name": "Refer 3 Friends",
+    "mission_detail": "Refer 3 friends and get extra rewards.",
+    "mission_rewards": 250
+  },
+  {
+    "mission_name": "Solve 10 Coding Problems",
+    "mission_detail": "Solve any 10 coding problems to earn rewards.",
+    "mission_rewards": 350
+  },
+  {
+    "mission_name": "Participate in a Hackathon",
+    "mission_detail": "Join a hackathon and earn exclusive rewards.",
+    "mission_rewards": 700
+  },
+  {
+    "mission_name": "Earn 1000 XP",
+    "mission_detail": "Reach 1000 XP to receive bonus coins.",
+    "mission_rewards": 500
+  }
+]

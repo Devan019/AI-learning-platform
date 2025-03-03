@@ -1,0 +1,16 @@
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(800px) translateY(100px);
+    opacity: 0;
+  }
+}
+
+.animate-meteor-effect {
+  position: absolute;
+  animation: meteor linear infinite;
+  will-change: transform, opacity;
+}
