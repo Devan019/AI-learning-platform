@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 
 const OneCourse = () => {
-  const { courseId } = useParams();
+  const { courseid } = useParams();
   const [voices, setVoices] = useState([]);
   const [Content, setContent] = useState("");
   const [course, setCourse] = useState({
@@ -30,10 +30,19 @@ const OneCourse = () => {
     loadVoices();
   }, []);
 
+  async function getContent() {
+    console.log(courseid)
+    const api = await axios.get(`http://localhost:8090/api/courses/${courseid}`)
+
+    const courses = api.data;
+    return courses;
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const obj = JSON.parse(localStorage.getItem("courses"));
+        const obj = await getContent();
+        console.log(obj)
         let string = obj.title + obj.description;
         obj.contents.forEach((content) => {
           string += content.sectionTitle + content.body;
@@ -47,7 +56,7 @@ const OneCourse = () => {
       }
     }
     fetchData();
-  }, [courseId]);
+  }, [courseid]);
 
   const speakText = () => {
     if (!("speechSynthesis" in window)) {

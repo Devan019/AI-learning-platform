@@ -7,12 +7,20 @@ import * as THREE from "three";
 import { motion } from "framer-motion";
 import { FaBrain, FaRobot, FaGift } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const words = `Welcome to Smart AI based Learning Platform`;
 
 const Home = () => {
   const [vantaEffect, setVantaEffect] = useState(null);
   const vantaRef = useRef(null);
+
+  async function justData(){
+    const api = await axios.get("http://localhost:8090/api/auth/user",{withCredentials:true})
+
+    console.log(api.data)
+
+  }
 
   useEffect(() => {
     if (!vantaEffect) {
@@ -37,6 +45,13 @@ const Home = () => {
       if (vantaEffect) vantaEffect.destroy();
     };
   }, [vantaEffect]);
+
+  useEffect(()=>{
+    async function main() {
+      await justData();
+    }
+    main()
+  },[])
 
   return (
     <div className="w-full bg-[#0d0e13] text-white">

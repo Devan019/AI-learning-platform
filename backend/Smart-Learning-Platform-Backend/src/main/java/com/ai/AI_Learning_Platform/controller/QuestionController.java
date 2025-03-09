@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/questions")
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;

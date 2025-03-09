@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/quizzes")
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class QuizController {
     @Autowired
     private QuizService quizService;

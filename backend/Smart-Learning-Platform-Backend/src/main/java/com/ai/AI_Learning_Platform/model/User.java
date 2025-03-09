@@ -29,6 +29,7 @@ public class User {
     private String extracurricularActivities;
     private String researchInterests;
     private String careerGoals;
+    private String password;
 
     @ElementCollection
     private List<String> technicalSkills;

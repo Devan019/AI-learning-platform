@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/gemini")
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class AIController {
 
     @Autowired
@@ -113,7 +113,7 @@ public ResponseEntity<?> generateAndSaveCourse(@PathVariable Long userId) {
             // Properly escape the JSON format
             String prompt = "Generate a JSON course structure based on the user's interest: " + user.getMainInterest() +
                     ". Follow this exact JSON format: { \\\"title\\\": \\\"Course Title\\\", \\\"description\\\": \\\"Brief overview\\\", " +
-                    "\\\"contents\\\": [{ \\\"id\\\": 1, \\\"sectionTitle\\\": \\\"Intro\\\", \\\"body\\\": \\\"Content here...\\\" }], " +
+                    "\\\"contents\\\": [{ \\\"sectionTitle\\\": \\\"Intro\\\", \\\"body\\\": \\\"Content here...\\\" }], " +
                     "\\\"level\\\": \\\"Beginner\\\", \\\"createdByAI\\\": true } keep section body a little big!! .";
 
             // Call Gemini API

@@ -92,9 +92,8 @@ export function Interest() {
     setloading("");
     const id = await updateUser();
     const course = await genrateCourse(id);
-    console.log(course)
     await saveCourse(course, id);
-    // console.log("done");
+    console.log("done");
     setloading("hidden");
     navigate("/courses");
   }

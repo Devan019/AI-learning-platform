@@ -14,7 +14,7 @@ function Nav({ className }) {
 
   
 
-  const [isLogin, setisLogin] = useState(JSON.parse(localStorage.getItem("combinedFormData")));
+  const [isLogin, setisLogin] = useState(localStorage.getItem("login"));
   const [active, setActive] = useState(null);
 
   return (
@@ -34,14 +34,14 @@ function Nav({ className }) {
             <HoveredLink to="/chatbot" setActive={setActive} active={active} item="chatbot">
               Chatbot
             </HoveredLink>
-            <HoveredLink to="/started" setActive={setActive} active={active} item="started">
+            <HoveredLink to="/interest" setActive={setActive} active={active} item="started">
               AI-power
             </HoveredLink>
-            <HoveredLink to="/rewards" setActive={setActive} active={active} item="rewards">
+            {/* <HoveredLink to="/rewards" setActive={setActive} active={active} item="rewards">
               Rewards
-            </HoveredLink>
-            <HoveredLink to="/store" setActive={setActive} active={active} item="store">
-              Store
+            </HoveredLink> */}
+            <HoveredLink to="/logout" setActive={setActive} active={active} item="store">
+              Logout
             </HoveredLink>
           </>
           :
@@ -49,6 +49,7 @@ function Nav({ className }) {
             <HoveredLink to="/started" setActive={setActive} active={active} item="chatbot">
               Get started
             </HoveredLink>
+            
           </>
           }
       </Menu>

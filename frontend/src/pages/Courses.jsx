@@ -8,17 +8,28 @@ const Courses = () => {
 
   const [courses, setCourses] = useState([]);
 
+  async function getUser() {
+    const api = await axios.get("http://localhost:8090/api/auth/user",{withCredentials:true});
+
+    const user = api.data;
+
+    return user.id;
+  }
+
+  async function getCourses(id){
+    const api = await axios.get(`http://localhost:8090/api/courses/user/${id}`,{withCredentials: true});
+
+    const courses = api.data;
+
+    return courses;
+  }
+
   useEffect(() => {
     async function fetchData() {
-      console.log("Fetching data...");
-      const obj = JSON.parse(localStorage.getItem("courses"));
-  
-      if (obj) {
-        // Ensure obj is an array; if not, convert it into an array
-        const courseArray = Array.isArray(obj) ? obj : [obj];
-        console.log(courseArray);
-        setCourses(courseArray);
-      }
+      const id = await getUser()
+      const courses = await getCourses(id);
+      console.log(courses)
+      setCourses(courses)
     }
   
     fetchData();
@@ -42,7 +53,7 @@ const Courses = () => {
       <div className="mt-8 flex flex-wrap justify-center gap-6">
         {courses.map((course) => {
           return (
-            <Link to={`${course.title}`} className="w-80" key={course.id}>
+            <Link to={`${course.id}`} className="w-80" key={course.id}>
               <div className="border border-white/10 dark:bg-zinc-800 bg-white p-5 rounded-xl shadow-lg max-w-sm flex flex-col items-start transform transition duration-300 hover:scale-105 hover:shadow-xl" key={course.title}>
                 <EvervaultCard text={course.title} className="h-[35vh]" />
 
