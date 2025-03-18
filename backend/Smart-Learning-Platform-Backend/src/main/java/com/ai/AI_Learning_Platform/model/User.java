@@ -1,43 +1,31 @@
 package com.ai.AI_Learning_Platform.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
 @AllArgsConstructor
+@ToString
+
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    private String fullName;
     private String email;
-    private String degreeProgram;
-    private String university;
-    private String mainInterest;
-    private String graduationYear;
-    private String gpaScore;
-    private String extracurricularActivities;
-    private String researchInterests;
-    private String careerGoals;
     private String password;
 
-    @ElementCollection
-    private List<String> technicalSkills;
-
-    @ElementCollection
-    private List<String> domainExpertise;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User() {}
 
-    // Getters and Setters
 }

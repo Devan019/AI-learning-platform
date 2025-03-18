@@ -21,8 +21,8 @@ public class Quiz {
     private UUID id;
 
     private String title;
-    private UUID courseId; // Foreign key reference to Course
-    private String difficulty; // Easy, Medium, Hard
+    private UUID courseId;
+    private String difficulty;
 
 
 }

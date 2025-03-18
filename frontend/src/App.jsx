@@ -23,7 +23,7 @@ const App = () => {
     {/* <Route path="/rewards" element={<Rewards />} />
     <Route path="/store" element={<Store />} /> */}
     <Route path="/courses/:courseid" element={<Protect><OneCourse /></Protect>} />
-    <Route path="/course/:courseTitle/quiz" element={<Protect><Quiz /></Protect> } />
+    <Route path="/course/:courseid/quiz" element={<Protect><Quiz /></Protect> } />
     <Route path="/interest" element={<Protect><AIForm /></Protect>} />
     <Route path="/login" element = {<Login/>} />
     <Route path="/logout" element = {<Logout/>} />

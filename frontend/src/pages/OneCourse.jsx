@@ -226,7 +226,7 @@ const OneCourse = () => {
 
         <div className="mt-10">
           <button className="bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-lg font-medium">
-            <Link to={`/course/${course.title}/quiz`}>📝 Take Quiz</Link>
+            <Link to={`/course/${course.id}/quiz`}>📝 Take Quiz</Link>
           </button>
         </div>
       </div>

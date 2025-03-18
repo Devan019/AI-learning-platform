@@ -14,22 +14,26 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role : "STUDENT"
   });
 
-  async function checkUser(){
-    const api = await axios.post("http://localhost:8090/api/auth/login",formData,{withCredentials:true});
+  async function checkUser() {
+    const api = await axios.post("http://localhost:8090/api/auth/login", formData, { withCredentials: true });
     const data = api.data;
     console.log(data);
-    localStorage.setItem("login", true);
-
+    return data;
   }
 
 
   async function main() {
     setloading("");
-    await checkUser();
+    const data = await checkUser();
     setloading("hidden");
-    navigate("/");
+    if (data == "") alert("user doen't exit");
+    else {
+      localStorage.setItem("login", true);
+      navigate("/");
+    }
   }
 
   const handleChange = (e) => {
@@ -40,7 +44,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
 
     main();
   };
@@ -98,7 +102,7 @@ const Login = () => {
               </span>
             </button>
           </div>
-        <Link to={"/started"} className='text-center underline'>
+          <Link to={"/started"} className='text-center underline'>
             Don't have an account 🫡
           </Link>
         </FormContainer>

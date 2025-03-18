@@ -24,7 +24,7 @@ public class CourseService {
 
     // Create a new course
     @Transactional
-    public Course createCourse(Course course,Long userId) {
+    public Course createCourse(Course course,UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -58,12 +58,12 @@ public class CourseService {
         return courseRepository.findById(id);
     }
 
-    public List<Course> getCoursesByUserId(Long userId) {
+    public List<Course> getCoursesByUserId(UUID userId) {
         return courseRepository.findByUserId(userId);
     }
 
     // Update a course
-    public Course updateCourse(UUID id, Long userId,Course updatedCourse) {
+    public Course updateCourse(UUID id, UUID userId,Course updatedCourse) {
         return courseRepository.findById(id).map(course -> {
             if (userId != null) {
                 User user = userRepository.findById(userId)

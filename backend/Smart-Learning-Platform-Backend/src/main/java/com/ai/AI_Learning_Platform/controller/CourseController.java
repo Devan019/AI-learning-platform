@@ -41,8 +41,9 @@ public class CourseController {
 //        return ResponseEntity.ok(courseService.createCourse(course));
 //    }
 
+    //using
     @PostMapping("/user/{userId}")
-    public ResponseEntity<?> createCourse(@PathVariable Long userId, @RequestBody Course course) {
+    public ResponseEntity<?> createCourse(@PathVariable UUID userId, @RequestBody Course course) {
         try {
             System.out.println("in create");
 
@@ -83,61 +84,23 @@ public class CourseController {
     }
 
 
-
-    @GetMapping("/course/user/{userId}")
-    public ResponseEntity<?> fetchGeneratedCourse(@PathVariable Long userId) {
-        try {
-            // Step 1: Fetch user from DB
-            User user = userRepository.findById(userId).orElse(null);
-            if (user == null || user.getMainInterest() == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "User not found or interest missing"));
-            }
-
-            // Step 2: Generate Course JSON from AI
-            String prompt = "Generate a detailed JSON course structure based on the user's interest: " + user.getMainInterest() +
-                    ". Format it like this: { \"title\": \"Course Title\", \"description\": \"Brief overview\", " +
-                    "\"contents\": [{ \"id\": 1, \"sectionTitle\": \"Intro\", \"body\": \"Content here...\" }], " +
-                    "\"level\": \"Beginner\", \"createdByAI\": true }.";
-
-            String aiResponse = geminiService.generateContent(prompt);
-
-            // Step 3: Convert AI Response (JSON) to Course Object
-            ObjectMapper objectMapper = new ObjectMapper();
-            Course aiGeneratedCourse = objectMapper.readValue(aiResponse, Course.class);
-
-            // Step 4: Set user and save to DB
-            aiGeneratedCourse.setUser(user);
-            Course savedCourse = courseService.createCourse(aiGeneratedCourse, userId);
-
-            return ResponseEntity.ok(savedCourse);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Failed to process AI response", "details", e.getMessage()));
-        }
-    }
-
-
-    // Get All Courses
-    @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
-        return ResponseEntity.ok(courseService.getAllCourses());
-    }
-
     // Get Course by ID
+    //using
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Course>> getCourseById(@PathVariable UUID id) {
         return ResponseEntity.ok(courseService.getCourseById(id));
     }
 
+    //using
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Course>> getCoursesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<Course>> getCoursesByUserId(@PathVariable UUID userId) {
         return ResponseEntity.ok(courseService.getCoursesByUserId(userId));
     }
 
 
     // ✅ Update Course (with optional user update)
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable UUID id, @RequestParam(required = false) Long userId, @RequestBody Course updatedCourse) {
+    public ResponseEntity<Course> updateCourse(@PathVariable UUID id, @RequestParam(required = false) UUID userId, @RequestBody Course updatedCourse) {
         return ResponseEntity.ok(courseService.updateCourse(id, userId, updatedCourse));
     }
 

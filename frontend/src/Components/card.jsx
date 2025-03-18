@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Meteors } from "../Components/ui/metro";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function QuizApp() {
+  const {courseid} = useParams()
+  // console.log(courseid)
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quiz, setQuiz] = useState([]);
@@ -59,6 +61,14 @@ export function QuizApp() {
   //         document.removeEventListener("visibilitychange", handleVisibilityChange);
   //       };
   //     }, [voices]);
+
+  async function getContent() {
+    console.log(courseid)
+    const api = await axios.get(`http://localhost:8090/api/courses/${courseid}`)
+
+    const courses = api.data;
+    return courses;
+  }
     
 
   async function fetchQuiz(difficultyLevel) {

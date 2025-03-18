@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "contents")  // Prevents infinite recursion
+@ToString(exclude = "contents")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     @Id
@@ -28,28 +28,24 @@ public class Course {
     @Column(length = 1000)
     private String description;
 
-//    @Lob
-//    private String content;
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CourseContent> contents;
 
-    // ✅ Relationship with User (Foreign Key)
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)  // Creates a foreign key column
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
 
     private String level;
 
-    @JsonProperty("createdByAI")  // Ensures Jackson recognizes the field correctly
+    @JsonProperty("createdByAI")
     private Boolean createdByAI;
 
-    // ✅ Ensure contents are correctly linked to the course before saving
     public void setContents(List<CourseContent> contents) {
         this.contents = contents;
         if (contents != null) {
             for (CourseContent content : contents) {
-                content.setCourse(this);  // ✅ Ensures correct linkage
+                content.setCourse(this);
             }
         }
     }

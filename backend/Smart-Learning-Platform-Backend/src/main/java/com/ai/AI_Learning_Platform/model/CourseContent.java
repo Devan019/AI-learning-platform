@@ -13,17 +13,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "course")  // Prevents infinite recursion
+@ToString(exclude = "course")
 public class CourseContent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increments ID (1,2,3...)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private String sectionTitle;
 
     @Lob
-    @Column(columnDefinition = "TEXT")  // Allow long text
+    @Column(columnDefinition = "TEXT")
     private String body;
 
 
