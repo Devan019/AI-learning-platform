@@ -20,7 +20,7 @@ const Signup = () => {
   });
 
   async function dosignup(){
-    const api = await axios.post("http://localhost:8090/api/auth/signup",formData);
+    const api = await axios.post(`${import.meta.env.VITE_API}/auth/signup`,formData);
 
     const data = api.data;
     

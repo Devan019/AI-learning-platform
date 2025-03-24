@@ -31,8 +31,6 @@ public class Student extends User{
     @ElementCollection
     private List<String> domainExpertise;
 
-    @OneToMany(cascade = CascadeType.ALL ,  mappedBy = "student")
-    @JsonManagedReference
-    @JsonIgnore
-    private List<Chat> chats;
+    @OneToOne(mappedBy = "student")
+    private ChatBot chatBot;
 }

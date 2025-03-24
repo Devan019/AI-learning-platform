@@ -32,7 +32,7 @@ const OneCourse = () => {
 
   async function getContent() {
     console.log(courseid)
-    const api = await axios.get(`http://localhost:8090/api/courses/${courseid}`)
+    const api = await axios.get(`${import.meta.env.VITE_API}/courses/${courseid}`)
 
     const courses = api.data;
     return courses;

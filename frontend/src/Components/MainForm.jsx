@@ -34,7 +34,7 @@ export function Interest() {
 
   async function setDataOfUser() {
     try {
-      const api = await axios.get("http://localhost:8090/api/auth/user", { withCredentials: true });
+      const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`, { withCredentials: true });
       const user = api.data;
   
       setFormData((prevFormData) => ({
@@ -61,7 +61,7 @@ export function Interest() {
   async function genrateCourse(id) {
     console.log("generate course");
     const api = await axios.get(
-      `http://localhost:8090/api/gemini/course/user/${id}`
+      `${import.meta.env.VITE_API}/gemini/course/user/${id}`
     );
     let rawText = api.data.candidates[0].content.parts[0].text;
 
@@ -76,7 +76,7 @@ export function Interest() {
 
   async function updateUser() {
     console.log("create user");
-    const api = await axios.post(`http://localhost:8090/api/users`, formData,{withCredentials:true});
+    const api = await axios.post(`${import.meta.env.VITE_API}/users`, formData,{withCredentials:true});
     
     console.log(api.data);
     return api.data.id;
@@ -84,7 +84,7 @@ export function Interest() {
 
   async function saveCourse(course, id){
     console.log("save course");
-    const api = await axios.post(`http://localhost:8090/api/courses/user/${id}`,course,{withCredentials:true} )
+    const api = await axios.post(`${import.meta.env.VITE_API}/courses/user/${id}`,course,{withCredentials:true} )
     console.log(api.data);
   }
 

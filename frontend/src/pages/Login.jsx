@@ -18,7 +18,7 @@ const Login = () => {
   });
 
   async function checkUser() {
-    const api = await axios.post("http://localhost:8090/api/auth/login", formData, { withCredentials: true });
+    const api = await axios.post(`${import.meta.env.VITE_API}/auth/login`, formData, { withCredentials: true });
     const data = api.data;
     console.log(data);
     return data;

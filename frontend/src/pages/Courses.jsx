@@ -9,7 +9,7 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
 
   async function getUser() {
-    const api = await axios.get("http://localhost:8090/api/auth/user",{withCredentials:true});
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`,{withCredentials:true});
 
     const user = api.data;
 
@@ -17,7 +17,7 @@ const Courses = () => {
   }
 
   async function getCourses(id){
-    const api = await axios.get(`http://localhost:8090/api/courses/user/${id}`,{withCredentials: true});
+    const api = await axios.get(`${import.meta.env.VITE_API}/courses/user/${id}`,{withCredentials: true});
 
     const courses = api.data;
 

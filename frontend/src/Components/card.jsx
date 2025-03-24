@@ -64,7 +64,7 @@ export function QuizApp() {
 
   async function getContent() {
     console.log(courseid)
-    const api = await axios.get(`http://localhost:8090/api/courses/${courseid}`)
+    const api = await axios.get(`${import.meta.env.VITE_API}/courses/${courseid}`)
 
     const courses = api.data;
     return courses;
@@ -77,7 +77,7 @@ export function QuizApp() {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8090/api/gemini/question/${course.title}/${difficultyLevel}`
+        `${import.meta.env.VITE_API}/gemini/question/${course.title}/${difficultyLevel}`
       );
       const quizdata = response.data;
       const jsontext = quizdata.candidates[0].content.parts[0].text;

@@ -7,27 +7,36 @@ import axios from "axios";
 
 const Chatbot = () => {
   const [activeChat, setActiveChat] = useState("default");
-  const [allChats, setAllChats] = useState({
-    default: [
-      { text: "Hello! How can I help you today?", sender: "bot" },
-    ],
-  });
+  const [allChats, setAllChats] = useState([]);
+
+  const [loader, setLoader] = useState(false);
   const [input, setInput] = useState("");
   const [file, setFile] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatTitles, setChatTitles] = useState({
-    default: "New Conversation"
+    default: `chat_${Date.now()}`
   });
   const [editingChatId, setEditingChatId] = useState(null);
   const [newChatTitle, setNewChatTitle] = useState("");
 
   const messages = allChats[activeChat] || [];
 
+  async function getUser(){
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`);
+    return api.data;
+  }
+
+  async function loadChats(){
+    const user = await getUser();
+    const api = await axios.get(`${import.meta.env.VITE_API}/chats/user/${user.id}`)
+    return api.data;
+  }
+
   async function apicall(userInput) {
     console.log(userInput);
     try {
       const response = await axios.get(
-        `http://localhost:8090/api/gemini/chatbot/${userInput}`
+        `${import.meta.env.VITE_API}/gemini/chatbot/${userInput}`
       );
       console.log(response.data);
       const quizdata = response.data;
@@ -42,6 +51,11 @@ const Chatbot = () => {
     }
   }
 
+  async function setChatsByDB(){
+    
+    
+  }
+
   const createNewChat = () => {
     const chatId = `chat_${Date.now()}`;
     setAllChats(prev => ({
@@ -50,7 +64,7 @@ const Chatbot = () => {
     }));
     setChatTitles(prev => ({
       ...prev,
-      [chatId]: "New Conversation"
+      [chatId]: chatId
     }));
     setActiveChat(chatId);
   };
@@ -59,14 +73,14 @@ const Chatbot = () => {
     e.stopPropagation();
     const newChats = { ...allChats };
     delete newChats[chatId];
-    
+
     setAllChats(newChats);
-    
+
     // Also remove from chatTitles
     const newChatTitles = { ...chatTitles };
     delete newChatTitles[chatId];
     setChatTitles(newChatTitles);
-    
+
     if (chatId === activeChat) {
       const remainingChats = Object.keys(newChats);
       if (remainingChats.length > 0) {
@@ -104,7 +118,7 @@ const Chatbot = () => {
     if (!input.trim() && !file) return;
 
     const newMessages = [...messages, { text: input, sender: "user", file }];
-    
+
     setAllChats(prev => ({
       ...prev,
       [activeChat]: newMessages
@@ -114,10 +128,10 @@ const Chatbot = () => {
     if (!chatTitles[activeChat] || chatTitles[activeChat] === "New Conversation") {
       const firstUserMessage = input.trim();
       if (firstUserMessage) {
-        const autoTitle = firstUserMessage.length > 20 
-          ? `${firstUserMessage.slice(0, 20)}...` 
+        const autoTitle = firstUserMessage.length > 20
+          ? `${firstUserMessage.slice(0, 20)}...`
           : firstUserMessage;
-        
+
         setChatTitles(prev => ({
           ...prev,
           [activeChat]: autoTitle
@@ -134,21 +148,22 @@ const Chatbot = () => {
       ...prev,
       [activeChat]: [...newMessages, { text: data, sender: "bot" }]
     }));
+
+
   };
 
   const formatChatTitle = (chatId, messages) => {
-    // Return custom title if exists
+
     if (chatTitles[chatId]) return chatTitles[chatId];
-    
-    // Default title logic
+
     if (chatId === "default") return "New Conversation";
-    
+
     const firstUserMessage = messages.find(msg => msg.sender === "user");
     if (firstUserMessage) {
       const title = firstUserMessage.text.slice(0, 20);
       return title.length < firstUserMessage.text.length ? `${title}...` : title;
     }
-    
+
     return "New Conversation";
   };
 
@@ -157,9 +172,9 @@ const Chatbot = () => {
       <Navbar />
       <BackgroundLines className="bg-zinc-950 absolute inset-0" />
 
-      <div className="z-20 w-full max-w-6xl h-[80vh] flex relative">
+      <div className="z-20 w-full max-w-6xl h-[80vh] flex relative mt-16">
         {/* Sidebar */}
-        <motion.div 
+        <motion.div
           className="bg-zinc-900 border-r border-zinc-800 h-full overflow-hidden"
           initial={{ width: sidebarOpen ? "250px" : "0px" }}
           animate={{ width: sidebarOpen ? "250px" : "0px" }}
@@ -184,9 +199,8 @@ const Chatbot = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => editingChatId !== chatId && setActiveChat(chatId)}
-                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer ${
-                    activeChat === chatId ? "bg-zinc-700" : "bg-zinc-800 hover:bg-zinc-700"
-                  }`}
+                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer ${activeChat === chatId ? "bg-zinc-700" : "bg-zinc-800 hover:bg-zinc-700"
+                    }`}
                 >
                   {editingChatId === chatId ? (
                     <form onSubmit={saveRenameChat} className="flex-1 flex items-center">
@@ -238,22 +252,31 @@ const Chatbot = () => {
         </motion.div>
 
         {/* Main chat area */}
-        <motion.div 
+        <motion.div
           className="flex-1 border-zinc-800 border-2 rounded-lg shadow-lg flex flex-col overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
           <div className="p-4 border-b border-zinc-800 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-white">
-              {formatChatTitle(activeChat, messages)}
-            </h1>
-            <button 
+            <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="text-gray-400 hover:text-white p-1"
             >
-              {sidebarOpen ? "Hide" : "Show"} Sidebar
+              {/* Sidebar Icon */}
+              {sidebarOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+              )}
             </button>
+            <h1 className="text-xl font-bold text-white">
+              {formatChatTitle(activeChat, messages)}
+            </h1>
           </div>
 
           {/* Chat messages */}
@@ -264,16 +287,14 @@ const Chatbot = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className={`flex ${
-                  msg.sender === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
+                  }`}
               >
                 <div
-                  className={`p-3 rounded-lg max-w-[80%] break-words text-white shadow-md ${
-                    msg.sender === "user" 
-                      ? "bg-gradient-to-r from-purple-600 to-blue-500" 
+                  className={`p-3 rounded-lg max-w-[80%] break-words text-white shadow-md ${msg.sender === "user"
+                      ? "bg-gradient-to-r from-purple-600 to-blue-500"
                       : "bg-gradient-to-r from-zinc-700 to-zinc-800"
-                  }`}
+                    }`}
                 >
                   {msg.text}
                   {msg.file && (
@@ -288,7 +309,7 @@ const Chatbot = () => {
           </div>
 
           {/* Input and send button */}
-          <motion.div 
+          <motion.div
             className="p-4 border-t border-zinc-800"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

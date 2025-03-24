@@ -16,7 +16,7 @@ const Home = () => {
   const vantaRef = useRef(null);
 
   async function justData(){
-    const api = await axios.get("http://localhost:8090/api/auth/user",{withCredentials:true})
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`,{withCredentials:true})
 
     console.log(api.data)
 

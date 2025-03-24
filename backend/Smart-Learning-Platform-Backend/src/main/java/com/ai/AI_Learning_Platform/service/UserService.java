@@ -72,7 +72,7 @@ public class UserService {
             return null;
         }
 
-        System.out.println(student);
+        System.out.println("saved " + student);
         student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
         student.setRole(Role.STUDENT);
         return userRepository.save(student);
