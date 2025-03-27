@@ -1,5 +1,6 @@
 package com.ai.AI_Learning_Platform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,8 +11,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @AllArgsConstructor
-@ToString
-
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User {
@@ -25,6 +24,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private UUID resetToken;
 
     public User() {}
 

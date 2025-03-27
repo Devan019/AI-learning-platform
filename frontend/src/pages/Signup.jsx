@@ -5,6 +5,7 @@ import Input from '../Components/ui/input'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Loader } from 'lucide-react'
+import { signupEmailTemplate } from '../../public/mailTempletes/signup'
 
 const Signup = () => {
   const [loading, setloading] = useState("hidden")
@@ -28,14 +29,27 @@ const Signup = () => {
 
   }
 
+  async function sendSignupMail(){
+    const signupTemlate = signupEmailTemplate(formData.fullName, formData.email, "http://localhost:5173");
+    const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`,{
+      recipient : formData.email,
+      msgBody : signupTemlate,
+      subject : "🔥 You're In! Welcome to AI_LEARNING_PLATFORM"
+    })
+
+    return api.data;
+  }
+
   async function main() {
     setloading("");
     const data = await dosignup();
     console.log("data is " + data + typeof(data))
-    setloading("hidden");
     if(data != ""){
+      await sendSignupMail()
+      setloading("hidden");
       navigate("/login");
     }else{
+      setloading("hidden");
       alert("user already exit");
     }
   }

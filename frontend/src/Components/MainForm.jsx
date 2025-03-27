@@ -6,6 +6,7 @@ import skillsSuggestions from "../data/skills.data.json";
 import domainsSuggestions from "../data/domains.data.json";
 import axios from "axios";
 import Loader from "./ui/loader";
+import { useSelector } from "react-redux";
 
 export function Interest() {
   const [loading, setloading] = useState("hidden")
@@ -15,7 +16,10 @@ export function Interest() {
   const [filteredSkills, setFilteredSkills] = useState([]);
   const [skillsInputValue, setSkillsInputValue] = useState("");
   const [passworderror, setpassworderror] = useState("")
+  const {id,email}  = useSelector((state)=>state.getUser);
+  const {student} = useSelector((state) => state.getStudent)
 
+  
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -30,13 +34,24 @@ export function Interest() {
     researchInterests: "",
     careerGoals: "",
     tags: [],
+    phone : '',
+    id : null
   });
-
-  async function setDataOfUser() {
-    try {
-      const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`, { withCredentials: true });
-      const user = api.data;
   
+  useEffect(()=>{
+    if(id){
+      setFormData((prev)=>{
+        return {
+          ...prev,
+          id : id
+        }
+      })
+      console.log("in if")
+    }
+  }, [id])
+  function setDataOfUser() {
+      const user = student;
+      console.log(user.technicalSkills)
       setFormData((prevFormData) => ({
         ...prevFormData,
         fullName: user.fullName || "",
@@ -51,10 +66,8 @@ export function Interest() {
         extracurricularActivities: user.extracurricularActivities || "",
         researchInterests: user.researchInterests || "",
         careerGoals: user.careerGoals || "",
+        phone : user.phone || ""
       }));
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
   }
   
 
@@ -75,7 +88,7 @@ export function Interest() {
   }
 
   async function updateUser() {
-    console.log("create user");
+    console.log("create user",  formData);
     const api = await axios.post(`${import.meta.env.VITE_API}/users`, formData,{withCredentials:true});
     
     console.log(api.data);
@@ -90,18 +103,14 @@ export function Interest() {
 
   async function main() {
     setloading("");
-    const id = await updateUser();
-    const course = await genrateCourse(id);
-    console.log(course)
-    await saveCourse(course, id);
-    // console.log("done");
+     await updateUser();
     setloading("hidden");
-    navigate("/courses");
+    navigate("/profile");
   }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    setpassworderror("")
+    
   };
 
   const handleSkillInput = (e) => {
@@ -163,8 +172,10 @@ export function Interest() {
     main();
   };
   useEffect(()=>{
-    setDataOfUser()
-  }, [])
+    if(id && student){
+      setDataOfUser();
+    }
+  }, [id, student])
 
   return (
     <FormContainer
@@ -200,6 +211,19 @@ export function Interest() {
             placeholder="your.email@example.com"
             className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
             readOnly
+          />
+        </LabelInputContainer>
+        <LabelInputContainer>
+          <Label htmlFor="phone">
+            Phone no <span className="text-red-500">*</span>
+          </Label>
+          <Input
+            id="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            type="input"
+            placeholder="1234567890"
+            className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
           />
         </LabelInputContainer>
        

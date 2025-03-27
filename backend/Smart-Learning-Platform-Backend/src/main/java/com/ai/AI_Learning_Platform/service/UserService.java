@@ -1,23 +1,15 @@
 package com.ai.AI_Learning_Platform.service;
 
 
-import com.ai.AI_Learning_Platform.model.Role;
-import com.ai.AI_Learning_Platform.model.Student;
-import com.ai.AI_Learning_Platform.model.User;
+import com.ai.AI_Learning_Platform.model.*;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -39,7 +31,13 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public Student createNewUser(Student student){
+        student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
+        return studentRepository.save(student);
+    }
+
     public Student updateUser(Student student){
+        System.out.println("id is " + student.getId() + " email is" + student.getEmail());
 
         Optional<Student> student1 = studentRepository.findById(student.getId());
 
@@ -59,6 +57,7 @@ public class UserService {
         student2.setResearchInterests(student.getResearchInterests());
         student2.setTechnicalSkills(student.getTechnicalSkills());
         student2.setUniversity(student.getUniversity());
+        student2.setPhone(student.getPhone());
 
         studentRepository.save(student2);
         return student2;
@@ -79,18 +78,31 @@ public class UserService {
     }
 
     public User isVaildUser(User user, HttpSession httpSession){
-        System.out.println("Checking email: " + user.getEmail());
+        System.out.println("Checking email: " + user.getEmail() + " role is " + user.getRole());
 
-        User user1 = userRepository.findByEmail(user.getEmail());
-//        String email =  (userRepository.findAll()).get(0).getEmail();
-//        System.out.println("email checking : " + email);
-        System.out.println("User from DB: " + user1);
+        User user1 = userRepository.findByEmail(user.getEmail().trim());
+        List<User> users = userRepository.findAll();
+        for (var checkUser: users){
+            System.out.println("in loop " + user.getEmail() + " checkuser email" + checkUser.getEmail() + " and " + user.getEmail().equals(checkUser.getEmail()) );
+
+            if(user.getEmail().trim().equals(checkUser.getEmail().trim())){
+                user1 = checkUser;
+                System.out.println("check " + checkUser.getEmail());
+                break;
+            }
+        }
+
         if(user.getRole() != Role.STUDENT || user1 == null) return null;
         System.out.println("all done");
         if(!bCryptPasswordEncoder.matches(user.getPassword(), user1.getPassword()))
             return null;
 
         System.out.println("password match");
+
+        Object obj = httpSession.getAttribute("user");
+        if(obj != null){
+            httpSession.removeAttribute("user");
+        }
 
         httpSession.setAttribute("user", user1);
         System.out.println(httpSession.getAttribute("user"));
@@ -100,4 +112,94 @@ public class UserService {
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }
+
+    public UUID createToken(String email){
+        User user1 = null;
+        List<User> users = userRepository.findAll();
+        for (var checkUser: users){
+            if(email.trim().equals(checkUser.getEmail().trim())){
+                user1 = checkUser;
+                break;
+            }
+        }
+
+        if(user1 == null) return null;
+
+       UUID resetToken = UUID.randomUUID();
+
+        user1.setResetToken(resetToken);
+
+        User savedUser = userRepository.save(user1);
+        return savedUser.getResetToken();
+    }
+
+    public String getEmailByResetToken(UUID resetToken){
+        User user = userRepository.findByResetToken(resetToken);
+        if (user == null) return null;
+        return user.getEmail();
+    }
+
+    public User changePassword(User userInfo){
+        System.out.println(userInfo.getEmail() + " " + userInfo.getResetToken() + " " + "set");
+        User user1 = null;
+        List<User> users = userRepository.findAll();
+        for (var checkUser: users){
+            if(userInfo.getEmail().trim().equals(checkUser.getEmail().trim())){
+                user1 = checkUser;
+                break;
+            }
+        }
+
+
+        if(user1 == null) return null;
+        System.out.println("user found");
+
+        if(!user1.getResetToken().equals(userInfo.getResetToken())) return  null;
+        System.out.println("code getit");
+        user1.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
+        user1.setResetToken(null);
+        return userRepository.save(user1);
+    }
+    private Date calculateRenewDate(int daysToAdd) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, daysToAdd);
+        return calendar.getTime();
+    }
+
+    public Student makeOrder(Student student){
+        student.setPayment_date( new Date());
+
+        // Set renew date based on subscription type
+        if (student.getSubscription() == SUBSCRIPTION.MONTHLY) {
+            student.setRenew_date(calculateRenewDate(30)); // 30 days for monthly
+        } else if (student.getSubscription() == SUBSCRIPTION.YEARLY) {
+            student.setRenew_date(calculateRenewDate(365)); // 365 days for yearly
+        }
+
+        return studentRepository.save(student);
+    }
+
+    public Student getStudent(UUID uuid){
+        Optional<Student> student =  studentRepository.findById(uuid);
+        if (student.isEmpty()) return  null;
+        return  student.get();
+    }
+
+    public Student setRenew(UUID uuid){
+        Optional<Student> student = studentRepository.findById(uuid);
+        if( student.isEmpty()) return null;
+        Student student1 = student.get();
+        student1.setRenew_date(null);
+        student1.setPayment_date(null);
+        student1.setOrder_id(null);
+        return  studentRepository.save(student1);
+    }
+
+    public Student getUserByEmail(String email){
+        System.out.println("email is " + email);
+        return studentRepository.findByEmail(email);
+    }
+
+
 }

@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "contents")
+//@ToString(exclude = "contents")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     @Id
@@ -28,7 +28,7 @@ public class Course {
     @Column(length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseContent> contents;
 
     @ManyToOne
@@ -40,6 +40,9 @@ public class Course {
 
     @JsonProperty("createdByAI")
     private Boolean createdByAI;
+
+    @OneToMany(mappedBy = "course")
+    private List<Quiz> quizzes;
 
     public void setContents(List<CourseContent> contents) {
         this.contents = contents;

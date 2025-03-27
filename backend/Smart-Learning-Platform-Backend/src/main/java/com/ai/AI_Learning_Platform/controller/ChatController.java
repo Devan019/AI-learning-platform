@@ -33,6 +33,20 @@ public class ChatController {
         return chatService.getChats(userid);
     }
 
+    @GetMapping("/user/{userid}/chatbot")
+    public ResponseEntity<?> getBot(@PathVariable UUID userid){
+        ChatBot chatBot = chatService.getChatBot(userid);
+        if(chatBot == null){
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/user/{userid}/topics")
+    public List<String> getTitles(@PathVariable UUID userid){
+        return chatService.getTitles(userid);
+    }
+
     @GetMapping("/user/{userid}/{topic}")
     public List<Chat> getChatsByTopic(@PathVariable UUID userid, @PathVariable String topic){
         return  chatService.getChatsByTopic(userid, topic);

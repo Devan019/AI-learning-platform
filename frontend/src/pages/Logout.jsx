@@ -8,7 +8,7 @@ const Logout = () => {
   // const [first, setfirst] = useState(second)
 
   async function logout() {
-    const api = await axios.get("http://localhost:8090/api/auth/logout",{
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/logout`,{
       withCredentials : true
     });
     const data = api.data;

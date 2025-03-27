@@ -5,17 +5,59 @@ import Input from '../Components/ui/input'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Loader } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { setuserdata } from '../store/UserStore/setUserSlice'
+import { resetPasswordEmailTemplate } from '../../public/mailTempletes/resetpassword'
 
 const Login = () => {
   const [loading, setloading] = useState("hidden")
   const navigate = useNavigate();
   const [passworderror, setpassworderror] = useState("")
+  const dispatch = useDispatch()
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role : "STUDENT"
+    role : "STUDENT",
+    payment_date : null
   });
+
+  const genrateToken = async() => {
+    const api =  await axios.get(`${import.meta.env.VITE_API}/auth/resetToken/${formData.email}`)
+
+    return api.data;
+  }
+
+  const callForgotPassword = async() => {
+    setloading("");
+    const token = await genrateToken();
+    const template = resetPasswordEmailTemplate(formData.email, token);
+    const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`,{
+      recipient : formData.email,
+      msgBody: template,
+      subject: "🔑 Reset Your Password - Action Required"
+    })
+    setloading("hidden")
+
+  }
+
+  const forgotPassword = async() => {
+    const exitUser = await checkUser()
+    if(!exitUser){
+      alert("user is not exit");
+    }else{
+      await callForgotPassword();
+      alert("🥳show your mail ✔️")
+    }
+  }
+
+  const handelForgetPassword = () => {
+    if(!formData.email){
+      alert("enter your mail")
+    }else{
+      forgotPassword()
+    }
+  }
 
   async function checkUser() {
     const api = await axios.post(`${import.meta.env.VITE_API}/auth/login`, formData, { withCredentials: true });
@@ -28,10 +70,15 @@ const Login = () => {
   async function main() {
     setloading("");
     const data = await checkUser();
+    dispatch(setuserdata({
+      userd : data.id,
+      email : data.email
+    }))
     setloading("hidden");
     if (data == "") alert("user doen't exit");
     else {
       localStorage.setItem("login", true);
+      localStorage.setItem("HomeRefresh", true);
       navigate("/");
     }
   }
@@ -102,9 +149,12 @@ const Login = () => {
               </span>
             </button>
           </div>
-          <Link to={"/started"} className='text-center underline'>
+          <Link to={"/signup"} className='text-center underline'>
             Don't have an account 🫡
           </Link>
+          <button type='button' onClick={handelForgetPassword} className='float-right hover:underline hover:cursor-pointer'>
+            Forgot Your password
+          </button>
         </FormContainer>
       </div>
     </div>

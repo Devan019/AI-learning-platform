@@ -1,164 +1,228 @@
 import { useState, useEffect } from "react";
 import { BackgroundLines } from "../Components/ui/bg-lines";
 import { Navbar } from "../Components/Nav";
-import { Paperclip, Send, PlusCircle, MessageSquare, Trash2, Edit2 } from "lucide-react";
+import { Paperclip, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
-
+import { useSelector } from "react-redux";
+import ChatHistory from "../Components/ChatHistory";
+import ReactMarkDown from "react-markdown"
 const Chatbot = () => {
-  const [activeChat, setActiveChat] = useState("default");
+  const [activeChat, setActiveChat] = useState("New Conversation");
   const [allChats, setAllChats] = useState([]);
+  const { id, email, loading, error } = useSelector((state) => state.getUser);
 
   const [loader, setLoader] = useState(false);
   const [input, setInput] = useState("");
   const [file, setFile] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatTitles, setChatTitles] = useState({
-    default: `chat_${Date.now()}`
+    "New Conversation": "New Conversation"
   });
   const [editingChatId, setEditingChatId] = useState(null);
   const [newChatTitle, setNewChatTitle] = useState("");
 
+
   const messages = allChats[activeChat] || [];
 
-  async function getUser(){
-    const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`);
-    return api.data;
-  }
+  const saveConvertions = async (Chat) => {
+    const api = await axios.post(`${import.meta.env.VITE_API}/chats/user/${id}/${activeChat}`,Chat,{withCredentials : true})
 
-  async function loadChats(){
-    const user = await getUser();
-    const api = await axios.get(`${import.meta.env.VITE_API}/chats/user/${user.id}`)
     return api.data;
-  }
 
-  async function apicall(userInput) {
-    console.log(userInput);
+    // console.log(id, activeChat)
+  }
+  const geminiResponse = async (input) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API}/gemini/chatbot/${userInput}`
-      );
-      console.log(response.data);
-      const quizdata = response.data;
-      const jsontext = quizdata.candidates[0].content.parts[0].text;
-      const jsondata = JSON.parse(jsontext.replace(/```json|```/g, "").trim());
-
-      console.log(jsondata);
-      return jsondata.reply;
-    } catch (error) {
-      console.error("API call failed:", error);
-      return "Sorry, I couldn't process that request.";
-    }
-  }
-
-  async function setChatsByDB(){
-    
-    
-  }
-
-  const createNewChat = () => {
-    const chatId = `chat_${Date.now()}`;
-    setAllChats(prev => ({
-      ...prev,
-      [chatId]: [{ text: "Hello! How can I help you today?", sender: "bot" }]
-    }));
-    setChatTitles(prev => ({
-      ...prev,
-      [chatId]: chatId
-    }));
-    setActiveChat(chatId);
-  };
-
-  const deleteChat = (chatId, e) => {
-    e.stopPropagation();
-    const newChats = { ...allChats };
-    delete newChats[chatId];
-
-    setAllChats(newChats);
-
-    // Also remove from chatTitles
-    const newChatTitles = { ...chatTitles };
-    delete newChatTitles[chatId];
-    setChatTitles(newChatTitles);
-
-    if (chatId === activeChat) {
-      const remainingChats = Object.keys(newChats);
-      if (remainingChats.length > 0) {
-        setActiveChat(remainingChats[0]);
+      const api = await axios.get(`${import.meta.env.VITE_API}/gemini/chatbot/${input}`);
+      const geminiReply = api.data;
+      console.log("Raw Gemini response:", geminiReply);
+      
+      // Handle different response formats
+      let jsonText;
+      if (geminiReply.candidates && geminiReply.candidates[0]?.content?.parts[0]?.text) {
+        jsonText = geminiReply.candidates[0].content.parts[0].text;
+      } else if (geminiReply.text) {
+        // If response is already in the expected format
+        return { reply: geminiReply.text };
       } else {
-        createNewChat();
+        // If response is a simple string
+        return { reply: JSON.stringify(geminiReply) };
       }
+  
+      // Clean and parse the JSON
+      const cleanedText = jsonText.replace(/```json|```/g, "").trim();
+      console.log("Cleaned text:", cleanedText);
+      
+      try {
+        const jsondata = JSON.parse(cleanedText);
+        console.log("Parsed JSON data:", jsondata);
+        return jsondata;
+      } catch (parseError) {
+        console.error("Failed to parse JSON, returning raw text:", parseError);
+        return { reply: cleanedText };
+      }
+    } catch (error) {
+      console.error("Error getting Gemini response:", error);
+      return { reply: "Sorry, I couldn't process your request. Please try again." };
     }
   };
-
-  const startRenameChat = (chatId, e) => {
-    e.stopPropagation();
-    setEditingChatId(chatId);
-    setNewChatTitle(chatTitles[chatId] || formatChatTitle(chatId, allChats[chatId]));
-  };
-
-  const saveRenameChat = (e) => {
-    e.preventDefault();
-    if (editingChatId && newChatTitle.trim()) {
-      setChatTitles(prev => ({
-        ...prev,
-        [editingChatId]: newChatTitle.trim()
-      }));
-      setEditingChatId(null);
-      setNewChatTitle("");
-    }
-  };
-
-  const cancelRenameChat = () => {
-    setEditingChatId(null);
-    setNewChatTitle("");
-  };
-
+  
   const sendMessage = async () => {
     if (!input.trim() && !file) return;
-
-    const newMessages = [...messages, { text: input, sender: "user", file }];
-
+  
+    const newMessages = [...messages, { text: input, sender: "USER", file }];
     setAllChats(prev => ({
       ...prev,
       [activeChat]: newMessages
     }));
-
-    // If this is the first user message and no custom title, generate a title
-    if (!chatTitles[activeChat] || chatTitles[activeChat] === "New Conversation") {
-      const firstUserMessage = input.trim();
-      if (firstUserMessage) {
-        const autoTitle = firstUserMessage.length > 20
-          ? `${firstUserMessage.slice(0, 20)}...`
-          : firstUserMessage;
-
-        setChatTitles(prev => ({
-          ...prev,
-          [activeChat]: autoTitle
-        }));
-      }
-    }
-
+    
     setInput("");
     setFile(null);
-
-    const data = await apicall(input);
-
-    setAllChats(prev => ({
-      ...prev,
-      [activeChat]: [...newMessages, { text: data, sender: "bot" }]
-    }));
-
-
+  
+    try {
+      setLoader(true);
+      const data = await geminiResponse(input);
+      const responseText = data.reply || JSON.stringify(data);
+      
+      setAllChats(prev => ({
+        ...prev,
+        [activeChat]: [...newMessages, { text: responseText, sender: "GEMINI" }]
+      }));
+  
+      // Save conversations
+      try {
+        const userChatSave = await saveConvertions({ chatFrom: "USER", message: input });
+        if (!userChatSave) console.error("Failed to save user chat");
+        
+        const geminiResponseSave = await saveConvertions({ 
+          chatFrom: "GEMINI", 
+          message: responseText 
+        });
+        if (!geminiResponseSave) console.error("Failed to save Gemini response");
+      } catch (saveError) {
+        console.error("Error saving conversation:", saveError);
+      }
+    } catch (error) {
+      console.error("Error processing message:", error);
+      setAllChats(prev => ({
+        ...prev,
+        [activeChat]: [...newMessages, { 
+          text: "Sorry, an error occurred. Please try again.", 
+          sender: "GEMINI" 
+        }]
+      }));
+    } finally {
+      setLoader(false);
+    }
   };
 
-  const formatChatTitle = (chatId, messages) => {
+  const getChatBot = async () => {
+    const api = await axios(`${import.meta.env.VITE_API}/chats/user/${id}/chatbot`);
+    return api.data;
+  }
 
+  const getTitels = async () => {
+    const api = await axios(`${import.meta.env.VITE_API}/chats/user/${id}/topics`);
+    return api.data;
+  }
+  const createNewChat = () => {
+    // Find all existing chat numbers
+    const existingNumbers = Object.keys(chatTitles)
+      .map(title => {
+        const match = title.match(/New Chat (\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      })
+      .filter(num => !isNaN(num));
+    
+    // Find the highest existing number
+    const maxNumber = existingNumbers.length > 0 ? Math.max(...existingNumbers) : 0;
+    
+    // Create new chat with next available number
+    const chatId = `New Chat ${maxNumber + 1}`;
+    
+    setAllChats(prev => ({
+      ...prev,
+      [chatId]: [{ text: "Hello! How can I help you today?", sender: "GEMINI" }]
+    }));
+    
+    setChatTitles(prev => ({
+      ...prev,
+      [chatId]: chatId
+    }));
+    
+    setActiveChat(chatId);
+  };
+  const loadChats = async (topic) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API}/chats/user/${id}/${topic}`,
+        { withCredentials: true }
+      );
+      return response.data || [];
+    } catch (error) {
+      console.error("Error loading chats:", error);
+      return [];
+    }
+  };
+
+
+
+  const main = async () => {
+    try {
+      setLoader(true);
+      const titles = await getTitels();
+      
+      if (!titles || titles.length === 0) {
+        createNewChat();
+        return;
+      }
+
+      // Initialize chats with actual data from backend
+      const newChats = {};
+      const newTitles = {};
+      
+      for (const title of titles) {
+        const chats = await loadChats(title);
+        newChats[title] = chats.map(chat => ({
+          text: chat.message,
+          sender: chat.chatFrom,
+          file: null
+        }));
+        newTitles[title] = title;
+      }
+
+      setAllChats(newChats);
+      setChatTitles(newTitles);
+      
+      // Set first chat as active if available
+      const firstChatId = titles[0];
+      if (firstChatId) {
+        setActiveChat(firstChatId);
+      }
+    } catch (error) {
+      console.error("Error initializing chats:", error);
+      createNewChat();
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      main();
+      console.log(id)
+    }
+  }, [id])
+
+
+
+  const formatChatTitle = (chatId, messages) => {
     if (chatTitles[chatId]) return chatTitles[chatId];
 
-    if (chatId === "default") return "New Conversation";
+    if (chatId === "New Conversation") return "New Conversation";
 
-    const firstUserMessage = messages.find(msg => msg.sender === "user");
+    const firstUserMessage = messages.find(msg => msg.sender === "USER");
     if (firstUserMessage) {
       const title = firstUserMessage.text.slice(0, 20);
       return title.length < firstUserMessage.text.length ? `${title}...` : title;
@@ -174,82 +238,23 @@ const Chatbot = () => {
 
       <div className="z-20 w-full max-w-6xl h-[80vh] flex relative mt-16">
         {/* Sidebar */}
-        <motion.div
-          className="bg-zinc-900 border-r border-zinc-800 h-full overflow-hidden"
-          initial={{ width: sidebarOpen ? "250px" : "0px" }}
-          animate={{ width: sidebarOpen ? "250px" : "0px" }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
-          <div className="p-4 flex flex-col h-full">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={createNewChat}
-              className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg p-3 mb-4 w-full"
-            >
-              <PlusCircle size={18} />
-              <span>New Chat</span>
-            </motion.button>
+        <ChatHistory
+          allChats={allChats}
+          activeChat={activeChat}
+          setActiveChat={setActiveChat}
+          editingChatId={editingChatId}
+          newChatTitle={newChatTitle}
+          setNewChatTitle={setNewChatTitle}
+          chatTitles={chatTitles}
+          formatChatTitle={formatChatTitle}
+          sidebarOpen={sidebarOpen}
+          setChatTitles={setChatTitles}
+          setAllChats={setAllChats}
+          setEditingChatId={setEditingChatId}
+          id={id}
+          createNewChat={createNewChat}
+        />
 
-            {/* Chat history */}
-            <div className="flex-1 overflow-y-auto space-y-2 pr-1">
-              {Object.entries(allChats).map(([chatId, chatMessages]) => (
-                <motion.div
-                  key={chatId}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => editingChatId !== chatId && setActiveChat(chatId)}
-                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer ${activeChat === chatId ? "bg-zinc-700" : "bg-zinc-800 hover:bg-zinc-700"
-                    }`}
-                >
-                  {editingChatId === chatId ? (
-                    <form onSubmit={saveRenameChat} className="flex-1 flex items-center">
-                      <input
-                        type="text"
-                        value={newChatTitle}
-                        onChange={(e) => setNewChatTitle(e.target.value)}
-                        className="flex-1 bg-zinc-600 text-white text-sm p-1 rounded outline-none"
-                        autoFocus
-                        onBlur={cancelRenameChat}
-                        onKeyDown={(e) => e.key === "Escape" && cancelRenameChat()}
-                      />
-                      <button type="submit" className="ml-2 text-green-500">
-                        <Send size={14} />
-                      </button>
-                    </form>
-                  ) : (
-                    <>
-                      <div className="flex items-center space-x-2 overflow-hidden">
-                        <MessageSquare size={16} className="text-gray-400 shrink-0" />
-                        <span className="text-white text-sm truncate">
-                          {formatChatTitle(chatId, chatMessages)}
-                        </span>
-                      </div>
-                      <div className="flex space-x-1">
-                        <motion.button
-                          whileHover={{ scale: 1.2 }}
-                          whileTap={{ scale: 0.8 }}
-                          onClick={(e) => startRenameChat(chatId, e)}
-                          className="text-gray-400 hover:text-blue-500"
-                        >
-                          <Edit2 size={14} />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.2 }}
-                          whileTap={{ scale: 0.8 }}
-                          onClick={(e) => deleteChat(chatId, e)}
-                          className="text-gray-400 hover:text-red-500"
-                        >
-                          <Trash2 size={14} />
-                        </motion.button>
-                      </div>
-                    </>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
 
         {/* Main chat area */}
         <motion.div
@@ -287,16 +292,16 @@ const Chatbot = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
+                className={`flex ${msg.sender === "USER" ? "justify-end" : "justify-start"
                   }`}
               >
                 <div
-                  className={`p-3 rounded-lg max-w-[80%] break-words text-white shadow-md ${msg.sender === "user"
-                      ? "bg-gradient-to-r from-purple-600 to-blue-500"
-                      : "bg-gradient-to-r from-zinc-700 to-zinc-800"
+                  className={`p-3 rounded-lg max-w-[80%] break-words text-white shadow-md ${msg.sender === "USER"
+                    ? "bg-gradient-to-r from-purple-600 to-blue-500"
+                    : "bg-gradient-to-r from-zinc-700 to-zinc-800"
                     }`}
                 >
-                  {msg.text}
+                  <ReactMarkDown>{msg.text}</ReactMarkDown>
                   {msg.file && (
                     <div className="mt-2 p-2 bg-zinc-800 rounded text-xs flex items-center gap-1">
                       <Paperclip size={12} />

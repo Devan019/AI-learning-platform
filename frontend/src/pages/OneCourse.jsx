@@ -31,11 +31,40 @@ const OneCourse = () => {
   }, []);
 
   async function getContent() {
-    console.log(courseid)
-    const api = await axios.get(`${import.meta.env.VITE_API}/courses/${courseid}`)
-
-    const courses = api.data;
-    return courses;
+    try {
+      console.log(courseid);
+      const response = await axios.get(`${import.meta.env.VITE_API}/courses/${courseid}`);
+      
+      // 1. First check if data is already parsed
+      if (typeof response.data !== 'string') {
+        return response.data;
+      }
+  
+      // 2. Clean and repair JSON string
+      const cleanJson = response.data
+        .replace(/,\s*]/g, ']')  // Remove trailing commas before ]
+        .replace(/,\s*}/g, '}')  // Remove trailing commas before }
+        .replace(/]\s*}/g, ']}') // Fix missing comma between array and object
+        .replace(/}\s*]/g, '}]') // Fix missing comma between object and array
+        .replace(/"\s*:\s*]/g, '":[]') // Fix empty arrays
+        .replace(/"\s*:\s*}/g, '":{}'); // Fix empty objects
+  
+      // 3. Parse with error handling
+      try {
+        return JSON.parse(cleanJson);
+      } catch (parseError) {
+        console.error("Parse error after cleaning:", parseError);
+        // Fallback: Extract JSON from string
+        const jsonMatch = cleanJson.match(/[\{\[].*[\}\]]/);
+        if (jsonMatch) {
+          return JSON.parse(jsonMatch[0]);
+        }
+        throw new Error("Could not parse course data");
+      }
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+      throw error; // Re-throw for calling function to handle
+    }
   }
 
   useEffect(() => {

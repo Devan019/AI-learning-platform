@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "course")
+//@ToString(exclude = "course")
 public class CourseContent {
 
     @Id

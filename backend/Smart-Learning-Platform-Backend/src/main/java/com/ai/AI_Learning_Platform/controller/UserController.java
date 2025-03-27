@@ -29,9 +29,19 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/email/{email}")
+    public Student getUserByEmail(@PathVariable String email){
+        return userService.getUserByEmail(email);
+    }
+
+    @PostMapping("/create")
+    public Student createUser(@RequestBody Student student){
+        return userService.createNewUser(student);
+    }
+
     @PostMapping
-    public ResponseEntity<Student> createUser(@RequestBody Student user) {
-        return ResponseEntity.ok(userService.updateUser(user));
+    public Student updateUser(@RequestBody Student user) {
+        return userService.updateUser(user);
     }
 
     @PutMapping("/{id}")
@@ -50,4 +60,22 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/makeOrder")
+    public Student makeOrder(@RequestBody Student student){
+        System.out.println(student  + " " + student.getEmail() + " " + student.getOrder_id());
+        return userService.makeOrder(student);
+    }
+
+    @GetMapping("/student/{userid}")
+    public Student getstudent(@PathVariable UUID userid){
+        return userService.getStudent(userid);
+    }
+
+    @GetMapping("/renew/{userid}")
+    public Student renewStudent(@PathVariable UUID userid){
+        return  userService.setRenew(userid);
+    }
+
+
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Meteors } from "../Components/ui/metro";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, addPointerEvent } from "framer-motion";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -20,6 +20,11 @@ export function QuizApp() {
   const [warning, setWarning] = useState("");
   const [voices, setVoices] = useState([]);
   const navigate = useNavigate();
+  const [title, settitle] = useState("")
+  const [course, setcourse] = useState(null)
+  const [userLevel, setUserLevel] = useState("Beginner")
+  const [levelMessage, setLevelMessage] = useState('');
+  const [course_id, setcourse_id] = useState("");
 
   useEffect(() => {
     fetchQuiz(difficulty);
@@ -69,12 +74,28 @@ export function QuizApp() {
     const courses = api.data;
     return courses;
   }
+
+  useEffect(() => {
+    if (score >= 4) {
+      setUserLevel('Advanced');
+      setLevelMessage("Excellent! You are at an Advanced Level.");
+    } else if (score >= 2) {
+      setUserLevel('Intermediate');
+      setLevelMessage("Good Job! You are at an Intermediate Level.");
+    } else if (score <= 1) {  
+      setUserLevel('Beginner');
+      setLevelMessage("Keep Practicing! You are at a Beginner Level.");
+    }
+  }, [score]);
     
 
   async function fetchQuiz(difficultyLevel) {
-    const course = JSON.parse(localStorage.getItem("courses"));
+    const course = await getContent()
+    setcourse(course)
     if (!course?.title) return;
+    settitle(course.title)
     setIsLoading(true);
+    setcourse_id(course.id);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API}/gemini/question/${course.title}/${difficultyLevel}`
@@ -114,6 +135,12 @@ export function QuizApp() {
     );
   };
 
+  const sendReport = async (obj) => {
+    const api = await axios.post(`${import.meta.env.VITE_API}/quizzes/${course_id}`,obj);
+    console.log(api.data)
+    return api.data;
+  }
+
   const handleNext = () => {
     console.log(submit);
     if (submit) {
@@ -130,6 +157,14 @@ export function QuizApp() {
       });
 
       if (totalQuestions == 5) {
+
+        const sendObj = {
+          title: title,
+          course: course,
+          score : score,
+          userLevel: userLevel
+        }
+        sendReport(sendObj)
         setShowResults(true);
         return;
       }
@@ -211,11 +246,7 @@ export function QuizApp() {
             Your Score: {score} / {5}
           </p>
           <p className="text-md mt-2">
-            {score >= 4
-              ? "Excellent! You are at an Advanced Level."
-              : score >= 2
-              ? "Good Job! You are at an Intermediate Level."
-              : "Keep Practicing! You are at a Beginner Level."}
+            {levelMessage}
           </p>
 
           <motion.button

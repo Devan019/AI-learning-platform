@@ -93,8 +93,8 @@ public class CourseController {
 
     //using
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Course>> getCoursesByUserId(@PathVariable UUID userId) {
-        return ResponseEntity.ok(courseService.getCoursesByUserId(userId));
+    public List<Course> getCoursesByUserId(@PathVariable UUID userId) {
+        return courseService.getCoursesByUserId(userId);
     }
 
 

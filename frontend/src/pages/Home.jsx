@@ -6,21 +6,23 @@ import GLOBE from "vanta/dist/vanta.globe.min";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { FaBrain, FaRobot, FaGift } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 const words = `Welcome to Smart AI based Learning Platform`;
 
 const Home = () => {
+
+  
+  
   const [vantaEffect, setVantaEffect] = useState(null);
   const vantaRef = useRef(null);
-
-  async function justData(){
-    const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`,{withCredentials:true})
-
-    console.log(api.data)
-
-  }
+  const [showRenewalNotice, setShowRenewalNotice] = useState(false);
+  const { id, email, loading, error, obj } = useSelector((state) => state.getUser);
+  const { student } = useSelector((state) => state.getStudent);
+  const navigate =  useNavigate();
+  const [login, setlogin] = useState(localStorage.getItem("login"))
 
   useEffect(() => {
     if (!vantaEffect) {
@@ -35,9 +37,9 @@ const Home = () => {
           minWidth: 200.0,
           scale: 1.0,
           scaleMobile: 1.0,
-          color: 0x52556d, // Lighter steel blue
-          color2: 0x30344c, // Soft navy
-          backgroundColor: 0x0d0e13, // Deeper dark mode
+          color: 0x52556d,
+          color2: 0x30344c,
+          backgroundColor: 0x0d0e13,
         })
       );
     }
@@ -46,15 +48,66 @@ const Home = () => {
     };
   }, [vantaEffect]);
 
-  useEffect(()=>{
-    async function main() {
-      await justData();
+
+  const sendRequsetToRenew = async() => {
+     await axios.get(`${import.meta.env.VITE_API}/users/renew/${id}`);
+  }
+  useEffect(() => {
+    if (id && student?.renew_date) {
+      const today = new Date();
+      const renewDate = new Date(student.renew_date);
+      const diffTime = today - renewDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      setShowRenewalNotice(diffDays)
+      
+      if(diffDays > 0){
+        sendRequsetToRenew()
+      }
+      if(id && obj){
+        if(obj.role == "ADMIN"){
+          navigate("/");
+        }
+      }
     }
-    main()
+  }, [id, student, obj]);
+
+
+  useEffect(()=>{
+    setlogin(localStorage.getItem("login"))
+  }, [login])
+
+  useEffect(()=>{
+    if(localStorage.getItem("HomeRefresh")){
+      localStorage.removeItem("HomeRefresh");
+      location.reload();
+    }
   },[])
+
+  
+
+  
 
   return (
     <div className="w-full bg-[#0d0e13] text-white">
+      {/* Renewal Notice */}
+      {login && showRenewalNotice >= 0 && (
+        <div className="fixed top-20 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-4">
+          <div>
+            <p className="font-bold">Your subscription has expired!</p>
+            <p>Please renew your plan to continue accessing premium features.</p>
+          <div className="flex space-x-2">
+            <button
+              onClick={() =>(navigate("/upgrade"))}
+              className="px-4 py-1 bg-white text-red-600 rounded hover:bg-gray-100 transition"
+            >
+              Renew
+            </button>
+            
+          </div>
+          </div>
+        </div>
+      )}
+
       {/* Vanta Background */}
       <div
         ref={vantaRef}
@@ -93,7 +146,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* Rest of your existing code... */}
       <section className="py-20 bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-center text-4xl font-bold mb-12">

@@ -1,10 +1,8 @@
 package com.ai.AI_Learning_Platform.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.eclipse.angus.mail.imap.protocol.INTERNALDATE;
 
 @Entity
 @Setter
@@ -12,6 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @DiscriminatorValue("ADMIN")
+@NoArgsConstructor
 public class Admin  extends User{
-    private String Authcode;
+    private Integer otp;
 }

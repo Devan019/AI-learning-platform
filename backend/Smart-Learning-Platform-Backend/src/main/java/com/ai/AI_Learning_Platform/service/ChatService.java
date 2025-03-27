@@ -45,41 +45,66 @@ public class ChatService {
     public Chat createChat(UUID userid, String topic, Chat chat) {
         System.out.println("in");
         ChatBot chatBot = getChatBot(userid);
-        if(chatBot == null) return null;
-        System.out.println("chatbot found");
-        List<Chat> chats = getChatsByTopic(userid, topic);
-        System.out.println("chats");
 
-        Map<String, List<Chat>> allChats = getChats(userid);
-        System.out.println("allchats");
-        if (chats == null) chats = new ArrayList<>();
+        // If chatbot doesn't exist, create a new one
+        if(chatBot == null){
+            createNew(userid, topic);
+            chatBot = getChatBot(userid); // Get the newly created chatbot
+        }
+
+        System.out.println("chatbot found");
+
+        // Initialize chats map if null
+        if (chatBot.getChats() == null) {
+            chatBot.setChats(new HashMap<>());
+        }
+
+        // Get or create the chat list for the topic
+        List<Chat> chats = chatBot.getChats().computeIfAbsent(topic, k -> new ArrayList<>());
+
+        // Add the new chat
         chats.add(chat);
         System.out.println("added");
-        allChats.put(topic, chats);
-        System.out.println("before");
+
+        // Save the updated chatbot
         chatBotRepository.save(chatBot);
         System.out.println("save thai gayu");
+
         return chat;
     }
 
+    public List<String> getTitles(UUID userid){
+        Map<String, List<Chat>> allChats = getChats(userid);
+        if(allChats == null || allChats.keySet() == null) return null;
+        return allChats.keySet().stream().toList();
+    }
+
     public Map<String, List<Chat>> createNew(UUID userid, String Topic) {
-        ChatBot chatBot = getChatBot(userid);
         Optional<Student> student = studentRepository.findById(userid);
-        if (chatBot == null) {
-            student.get().setChatBot(chatBot);
-            chatBot = new ChatBot();
-        }
-        Map<String, List<Chat>> newChats = chatBot.getChats();
-        if(newChats == null) newChats = new HashMap<>();
-        newChats.put(Topic, null);
         if (student.isEmpty()) {
             return null;
         }
-        chatBot.setStudent(student.get());
-        chatBot.setChats(newChats);
+
+        ChatBot chatBot = student.get().getChatBot();
+        if (chatBot == null) {
+            chatBot = new ChatBot();
+            chatBot.setStudent(student.get());
+            chatBot.setChats(new HashMap<>());
+        }
+
+        // Initialize chats if null
+        if (chatBot.getChats() == null) {
+            chatBot.setChats(new HashMap<>());
+        }
+
+        // Add the topic with empty list if not exists
+        chatBot.getChats().putIfAbsent(Topic, new ArrayList<>());
+
+        student.get().setChatBot(chatBot);
         chatBotRepository.save(chatBot);
         studentRepository.save(student.get());
-        return newChats;
+
+        return chatBot.getChats();
     }
 
     public List<Chat> renameTopic(UUID userid, String oldName, String newName) {

@@ -31,6 +31,7 @@ public class ChatBot {
 
     @OneToOne
     @JoinColumn(name = "student_id")
+    @JsonBackReference
     private Student student;
 
 }

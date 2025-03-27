@@ -2,6 +2,7 @@ package com.ai.AI_Learning_Platform.controller;
 
 import com.ai.AI_Learning_Platform.model.Student;
 import com.ai.AI_Learning_Platform.model.User;
+import com.ai.AI_Learning_Platform.model.UserInfo;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.service.AuthService;
 import com.ai.AI_Learning_Platform.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -62,5 +64,22 @@ public class AuthController {
             return  ResponseEntity.ok(500);
         }
     }
+
+    @GetMapping("/resetToken/{email}")
+    public UUID getToken(@PathVariable String email){
+        return userService.createToken(email);
+    }
+
+    @GetMapping("/resetToken/email/{resetToken}")
+    public String getEmail(@PathVariable UUID resetToken){
+        return userService.getEmailByResetToken(resetToken);
+    }
+
+
+    @PostMapping("/changePassword")
+    public User changePassword(@RequestBody User user){
+        return userService.changePassword(user);
+    }
+
 
 }
