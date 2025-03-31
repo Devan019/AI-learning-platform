@@ -89,6 +89,7 @@ const Home = () => {
 
   return (
     <div className="w-full bg-[#0d0e13] text-white">
+      
       {/* Renewal Notice */}
       {login && showRenewalNotice >= 0 && (
         <div className="fixed top-20 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-4">

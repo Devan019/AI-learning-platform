@@ -1,7 +1,6 @@
-package com.ai.AI_Learning_Platform.controller;
+package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
 import com.ai.AI_Learning_Platform.model.Quiz;
-import com.ai.AI_Learning_Platform.service.CourseService;
 import com.ai.AI_Learning_Platform.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

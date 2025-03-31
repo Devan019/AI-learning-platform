@@ -1,4 +1,4 @@
-package com.ai.AI_Learning_Platform.controller;
+package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
 import com.ai.AI_Learning_Platform.model.*;
 import com.ai.AI_Learning_Platform.repository.CourseRepository;

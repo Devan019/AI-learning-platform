@@ -3,10 +3,12 @@ import { Meteors } from "../Components/ui/metro";
 import { motion, AnimatePresence, addPointerEvent } from "framer-motion";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export function QuizApp() {
   const {courseid} = useParams()
   // console.log(courseid)
+  const {id,obj} = useSelector((state) => state.getUser)
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quiz, setQuiz] = useState([]);
@@ -74,6 +76,14 @@ export function QuizApp() {
     const courses = api.data;
     return courses;
   }
+
+  useEffect(()=>{
+    if(obj){
+      if(obj.role != 'STUDENT'){
+        navigate("/")
+      }
+    }
+  },[obj])
 
   useEffect(() => {
     if (score >= 4) {

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../Components/Nav";
 import { useSelector } from "react-redux";
-import axios from "axios";
+
 
 const ProfilePage = () => {
   const navigate = useNavigate();

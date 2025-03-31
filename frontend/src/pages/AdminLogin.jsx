@@ -60,7 +60,7 @@ const AdminLogin = () => {
         password : password
       }
       
-      const response = await axios.post(`${import.meta.env.VITE_API}/admin/login`,obj, {withCredentials : true}); 
+      const response = await axios.post(`${import.meta.env.VITE_API}/auth/admin/login`,obj, {withCredentials : true}); 
       
       const data = response.data;
       console.log(data)
@@ -126,7 +126,6 @@ const AdminLogin = () => {
         throw new Error(data.message || 'Invalid OTP');
       }
 
-      // Store admin token and redirect to dashboard
       localStorage.setItem('adminlogin', true);
       navigate('/admin');
     } catch (err) {

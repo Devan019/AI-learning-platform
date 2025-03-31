@@ -33,7 +33,7 @@ const OneCourse = () => {
   async function getContent() {
     try {
       console.log(courseid);
-      const response = await axios.get(`${import.meta.env.VITE_API}/courses/${courseid}`);
+      const response = await axios.get(`${import.meta.env.VITE_API}/courses/${courseid}`,{withCredentials: true});
       
       // 1. First check if data is already parsed
       if (typeof response.data !== 'string') {

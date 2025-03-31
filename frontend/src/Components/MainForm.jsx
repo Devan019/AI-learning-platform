@@ -74,7 +74,8 @@ export function Interest() {
   async function genrateCourse(id) {
     console.log("generate course");
     const api = await axios.get(
-      `${import.meta.env.VITE_API}/gemini/course/user/${id}`
+      `${import.meta.env.VITE_API}/gemini/course/user/${id}`,
+      {withCredentials: true}
     );
     let rawText = api.data.candidates[0].content.parts[0].text;
 

@@ -46,7 +46,7 @@ const ForgotPassword = () => {
         email: formData.email,
         password: formData.newPassword,
         resetToken : resetToken
-      });
+      },{withCredentials:true});
       alert('Password reset successful!');
       navigate('/login');
     } catch (error) {

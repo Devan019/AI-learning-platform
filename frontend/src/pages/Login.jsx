@@ -18,22 +18,22 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role : "STUDENT",
-    payment_date : null
+    role: "STUDENT",
+    payment_date: null
   });
 
-  const genrateToken = async() => {
-    const api =  await axios.get(`${import.meta.env.VITE_API}/auth/resetToken/${formData.email}`)
+  const genrateToken = async () => {
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/resetToken/${formData.email}`)
 
     return api.data;
   }
 
-  const callForgotPassword = async() => {
+  const callForgotPassword = async () => {
     setloading("");
     const token = await genrateToken();
     const template = resetPasswordEmailTemplate(formData.email, token);
-    const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`,{
-      recipient : formData.email,
+    const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`, {
+      recipient: formData.email,
       msgBody: template,
       subject: "🔑 Reset Your Password - Action Required"
     })
@@ -41,46 +41,50 @@ const Login = () => {
 
   }
 
-  const forgotPassword = async() => {
+  const forgotPassword = async () => {
     const exitUser = await checkUser()
-    if(!exitUser){
+    if (!exitUser) {
       alert("user is not exit");
-    }else{
+    } else {
       await callForgotPassword();
       alert("🥳show your mail ✔️")
     }
   }
 
   const handelForgetPassword = () => {
-    if(!formData.email){
+    if (!formData.email) {
       alert("enter your mail")
-    }else{
+    } else {
       forgotPassword()
     }
   }
 
   async function checkUser() {
-    const api = await axios.post(`${import.meta.env.VITE_API}/auth/login`, formData, { withCredentials: true });
-    const data = api.data;
-    console.log(data);
-    return data;
+    try {
+      const api = await axios.post(`${import.meta.env.VITE_API}/auth/login`, formData, { withCredentials: true });
+      const data = api.data;
+      console.log(data);
+      return data;
+    }catch(e){
+      return ""
+    }
   }
 
 
   async function main() {
     setloading("");
     const data = await checkUser();
-    dispatch(setuserdata({
-      userd : data.id,
-      email : data.email
-    }))
-    setloading("hidden");
     if (data == "") alert("user doen't exit");
     else {
       localStorage.setItem("login", true);
       localStorage.setItem("HomeRefresh", true);
       navigate("/");
     }
+    dispatch(setuserdata({
+      userd: data.id,
+      email: data.email
+    }))
+    setloading("hidden");
   }
 
   const handleChange = (e) => {

@@ -15,7 +15,7 @@ const Courses = () => {
   const levels = ["Beginner", "Intermediate", "Advanced", "Expert"];
   const [courses, setCourses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id } = useSelector((state) => state.getUser);
+  const { id,obj } = useSelector((state) => state.getUser);
   const { student } = useSelector((state) => state.getStudent);
   const [loading, setLoading] = useState(false);
   const [courseLimit, setcourseLimit] = useState(3)
@@ -36,6 +36,13 @@ const Courses = () => {
   }
 
   useEffect(() => {
+
+    if(obj){
+      if(obj.role != 'STUDENT'){
+        navigate("/")
+      }
+    }
+
     if (id) {
       const fetchData = async () => {
         setLoading(true);
@@ -118,7 +125,7 @@ const Courses = () => {
       setLoading(true);
       const api = await axios.post(
         `${import.meta.env.VITE_API}/gemini/course/user/${id}`,
-        { courseLevel, courseName }
+        { courseLevel, courseName },{withCredentials: true}
       );
       let rawText = api.data.candidates[0].content.parts[0].text;
       let cleanedText = rawText.replace(/```json|```/g, "").trim();

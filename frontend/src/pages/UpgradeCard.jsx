@@ -16,7 +16,8 @@ export function UpgradeCard({ title, price, description, benefits, buttonText, i
     const api = await axios.post(`${import.meta.env.VITE_API}/users/makeOrder`, obj, {
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      withCredentials: true
     });
     console.log(api.data);
     localStorage.setItem("CoursesRefresh", true);
@@ -147,7 +148,7 @@ export function UpgradeCard({ title, price, description, benefits, buttonText, i
 }
 
 export default function UpgradePage() {
-  const { id, email } = useSelector((state) => state.getUser);
+  const { id, email,obj } = useSelector((state) => state.getUser);
   const { student } = useSelector((state) => state.getStudent);
   const [rzp1, setRzp1] = useState(null);
   const [phone, setphone] = useState(null);
@@ -156,6 +157,13 @@ export default function UpgradePage() {
   const [newStudent, setnewStudent] = useState(null);
 
   useEffect(() => {
+
+    if(obj){
+      if(obj.role != 'STUDENT'){
+        navigate("/")
+      }
+    }
+
     if (id && student) {
       if (!student.phone || !student.email || !student.fullName) {
         alert("Please complete your profile first");

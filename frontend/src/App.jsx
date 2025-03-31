@@ -22,6 +22,8 @@ import ProfilePage from "./pages/Profile"
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminLogin from "./pages/AdminLogin"
 import AdminProtect from "./Protect/AdminProtect"
+import AI3D from "./pages/HomeUse3d"
+import AppLoader from "./pages/HomeWithLoader"
 
 
 const App = () => {
@@ -42,18 +44,18 @@ const App = () => {
 
   return (
   <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/chatbot" element={<Protect><Chatbot /></Protect>} />
-    <Route path="/courses" element={<Protect><Courses /></Protect>} />
-    <Route path="/roadmap" element={<Protect><Roadmap /></Protect>} />
+    <Route path="/" element={<AppLoader />} />
+    <Route path="/chatbot" element={<Chatbot />} />
+    <Route path="/courses" element={<Courses />} />
+    <Route path="/roadmap" element={<Roadmap />} />
     <Route path="/started" element={<Login />} />
     {/* <Route path="/rewards" element={<Rewards />} />
     <Route path="/store" element={<Store />} /> */}
-    <Route path="/courses/:courseid" element={<Protect><OneCourse /></Protect>} />
-    <Route path="/course/:courseid/quiz" element={<Protect><Quiz /></Protect> } />
-    <Route path="/interest" element={<Protect><AIForm /></Protect>} />
-    <Route path="/upgrade" element = {<Protect><UpgradePage /></Protect>} />
-    <Route path="/profile" element = {<Protect><ProfilePage /></Protect>} />
+    <Route path="/courses/:courseid" element={<OneCourse />} />
+    <Route path="/course/:courseid/quiz" element={<Quiz /> } />
+    <Route path="/interest" element={<AIForm />} />
+    <Route path="/upgrade" element = {<UpgradePage />} />
+    <Route path="/profile" element = {<ProfilePage />} />
     <Route path="/login" element = {<Login/>} />
     <Route path="/logout" element = {<Logout/>} />
     <Route path="resetpassword" element = {<ForgotPassword />} />

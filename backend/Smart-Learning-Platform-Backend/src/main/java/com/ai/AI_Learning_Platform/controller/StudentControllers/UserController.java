@@ -1,4 +1,4 @@
-package com.ai.AI_Learning_Platform.controller;
+package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
 import com.ai.AI_Learning_Platform.model.Student;
 import com.ai.AI_Learning_Platform.model.User;
@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         User user = userService.getUserById(id);
-        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/email/{email}")
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody Student updatedUser) {
+    public ResponseEntity<Student> updateUser(@PathVariable UUID id, @RequestBody Student updatedUser) {
         User existingUser = userService.getUserById(id);
         if (existingUser == null) {
             return ResponseEntity.notFound().build();
@@ -55,11 +55,7 @@ public class UserController {
         return ResponseEntity.ok(userService.saveUser(updatedUser));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
-    }
+
 
     @PostMapping("/makeOrder")
     public Student makeOrder(@RequestBody Student student){

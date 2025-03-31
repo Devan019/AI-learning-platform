@@ -1,4 +1,4 @@
-package com.ai.AI_Learning_Platform.controller;
+package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
 import com.ai.AI_Learning_Platform.model.Course;
 import com.ai.AI_Learning_Platform.model.CourseContent;
@@ -8,7 +8,6 @@ import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import com.ai.AI_Learning_Platform.service.CourseService;
 import com.ai.AI_Learning_Platform.service.GeminiService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;

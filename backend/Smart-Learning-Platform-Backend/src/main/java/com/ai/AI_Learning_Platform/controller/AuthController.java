@@ -1,10 +1,10 @@
 package com.ai.AI_Learning_Platform.controller;
 
+import com.ai.AI_Learning_Platform.model.Admin;
 import com.ai.AI_Learning_Platform.model.Student;
 import com.ai.AI_Learning_Platform.model.User;
-import com.ai.AI_Learning_Platform.model.UserInfo;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
-import com.ai.AI_Learning_Platform.service.AuthService;
+import com.ai.AI_Learning_Platform.service.AdminService;
 import com.ai.AI_Learning_Platform.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,15 @@ import java.util.UUID;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class AuthController {
-    @Autowired
-    private AuthService authService;
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping("/users")
     public List<User> getUsers(){
@@ -79,6 +80,16 @@ public class AuthController {
     @PostMapping("/changePassword")
     public User changePassword(@RequestBody User user){
         return userService.changePassword(user);
+    }
+
+    @PostMapping("/admin/login")
+    public User loginAsAdmin(@RequestBody User admin, HttpSession session){
+        return adminService.loginAsAdmin(admin, session);
+    }
+
+    @PostMapping("/saveAdmin")
+    public Admin saveUser(@RequestBody Admin admin){
+        return adminService.saveAdmin(admin);
     }
 
 

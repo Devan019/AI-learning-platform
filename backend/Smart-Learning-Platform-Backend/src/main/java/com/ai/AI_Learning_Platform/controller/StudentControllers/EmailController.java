@@ -1,4 +1,4 @@
-package com.ai.AI_Learning_Platform.controller;
+package com.ai.AI_Learning_Platform.controller.StudentControllers;
 // Importing required classes
 
 import com.ai.AI_Learning_Platform.model.EmailDetails;

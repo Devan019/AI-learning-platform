@@ -9,6 +9,11 @@ const AdminProtect = ({ children }) => {
   const [hasCheckedInitially, setHasCheckedInitially] = useState(false);
 
   useEffect(() => {
+
+    if(localStorage.getItem("adminlogin")){
+      localStorage.removeItem("adminlogin")
+      location.reload()
+    }
     // First check after initial render or data fetch
     if (!hasCheckedInitially) {
       setHasCheckedInitially(true);
@@ -25,7 +30,7 @@ const AdminProtect = ({ children }) => {
     }
   }, [obj, hasCheckedInitially]);
 
-  // Only render children if user is an admin and has been verified
+  
   return (obj?.role === "ADMIN") ? children : <AdminLogin/>;
 };
 

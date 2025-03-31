@@ -117,13 +117,9 @@ const Chatbot = () => {
     }
   };
 
-  const getChatBot = async () => {
-    const api = await axios(`${import.meta.env.VITE_API}/chats/user/${id}/chatbot`);
-    return api.data;
-  }
 
   const getTitels = async () => {
-    const api = await axios(`${import.meta.env.VITE_API}/chats/user/${id}/topics`);
+    const api = await axios.get(`${import.meta.env.VITE_API}/chats/user/${id}/topics`,{withCredentials: true});
     return api.data;
   }
   const createNewChat = () => {
@@ -157,7 +153,7 @@ const Chatbot = () => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API}/chats/user/${id}/${topic}`,
-        { withCredentials: true }
+        {withCredentials: true}
       );
       return response.data || [];
     } catch (error) {

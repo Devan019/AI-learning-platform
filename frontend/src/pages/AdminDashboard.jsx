@@ -25,8 +25,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API}/users`);
-        const data = await response.json();
+        const response = await axios.get(`${import.meta.env.VITE_API}/users`);
+        const data =  response.data;
         let students = data.filter(user => user.role === "STUDENT");
         setUsers(students);
         setLoading(false);
@@ -36,6 +36,10 @@ const AdminDashboard = () => {
       }
     };
 
+    if(localStorage.getItem("adminlogin")){
+      localStorage.removeItem("adminlogin")
+      location.reload()
+    }
 
 
     fetchUsers();

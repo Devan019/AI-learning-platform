@@ -6,8 +6,11 @@ import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -81,21 +84,11 @@ public class UserService {
         System.out.println("Checking email: " + user.getEmail() + " role is " + user.getRole());
 
         User user1 = userRepository.findByEmail(user.getEmail().trim());
-        List<User> users = userRepository.findAll();
-        for (var checkUser: users){
-            System.out.println("in loop " + user.getEmail() + " checkuser email" + checkUser.getEmail() + " and " + user.getEmail().equals(checkUser.getEmail()) );
 
-            if(user.getEmail().trim().equals(checkUser.getEmail().trim())){
-                user1 = checkUser;
-                System.out.println("check " + checkUser.getEmail());
-                break;
-            }
-        }
-
-        if(user.getRole() != Role.STUDENT || user1 == null) return null;
+        if(user.getRole() != Role.STUDENT || user1 == null)   throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
         System.out.println("all done");
         if(!bCryptPasswordEncoder.matches(user.getPassword(), user1.getPassword()))
-            return null;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found ");
 
         System.out.println("password match");
 
@@ -105,7 +98,6 @@ public class UserService {
         }
 
         httpSession.setAttribute("user", user1);
-        System.out.println(httpSession.getAttribute("user"));
         return  user1;
     }
 
