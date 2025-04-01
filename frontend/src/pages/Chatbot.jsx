@@ -34,7 +34,7 @@ const Chatbot = () => {
   }
   const geminiResponse = async (input) => {
     try {
-      const api = await axios.get(`${import.meta.env.VITE_API}/gemini/chatbot/${input}`);
+      const api = await axios.get(`${import.meta.env.VITE_API}/gemini/chatbot/${input}`,{withCredentials : true});
       const geminiReply = api.data;
       console.log("Raw Gemini response:", geminiReply);
       
