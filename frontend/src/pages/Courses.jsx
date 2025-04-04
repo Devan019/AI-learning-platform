@@ -26,8 +26,8 @@ const Courses = () => {
 
   async function getCourses() {
     try {
-      const api = await axios.get(`${import.meta.env.VITE_API}/courses/user/${id}`, { withCredentials: true });
-      console.log(api.data)
+      const api = await axios.get(`${import.meta.env.VITE_API}/courses/user/${id}`,{withCredentials: true});
+      
       return api.data;
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -46,69 +46,12 @@ const Courses = () => {
     if (id) {
       const fetchData = async () => {
         setLoading(true);
-        try {
+        
           const response = await getCourses();
-          
-          // 1. Verify we have a string
-          if (typeof response !== 'string') {
-            setCourses(Array.isArray(response) ? response : []);
-            return;
-          }
-      
-          // 2. Advanced JSON repair
-          const repairedJson = repairMalformedJson(response);
-          
-          // 3. Parse with nested error handling
-          let parsedData;
-          try {
-            parsedData = JSON.parse(repairedJson);
-          } catch (e) {
-            console.error("Main parse failed, trying emergency extraction");
-            parsedData = extractJsonFromString(response);
-          }
-      
-          // 4. Final validation
-          setCourses(Array.isArray(parsedData) ? parsedData : []);
-          
-        } catch (error) {
-          console.error('Fetch error:', error);
-          setCourses([]);
-        } finally {
+          setCourses(response)
           setLoading(false);
-        }
       };
-      
-      // Helper functions
-      function repairMalformedJson(str) {
-        // Fix common malformations
-        return str
-          .replace(/([{\[,])\s*([}\]])/g, '$1$2') // Remove empty objects/arrays
-          .replace(/"\s*:\s*}/g, '":null}') // Fix empty values
-          .replace(/,\s*([}\]])/g, '$1'); // Remove trailing commas
-      }
-      
-      function extractJsonFromString(str) {
-        try {
-          // Find the outermost JSON structure
-          const jsonStart = Math.max(
-            str.indexOf('['),
-            str.indexOf('{')
-          );
-          const jsonEnd = Math.max(
-            str.lastIndexOf(']') + 1,
-            str.lastIndexOf('}') + 1
-          );
-          
-          if (jsonStart >= 0 && jsonEnd > jsonStart) {
-            const candidate = str.slice(jsonStart, jsonEnd);
-            return JSON.parse(repairMalformedJson(candidate));
-          }
-          return [];
-        } catch (e) {
-          console.error("Emergency extraction failed");
-          return [];
-        }
-      }
+  
       fetchData();
     }
 

@@ -3,6 +3,7 @@ package com.ai.AI_Learning_Platform.controller.StudentControllers;
 import com.ai.AI_Learning_Platform.model.Student;
 import com.ai.AI_Learning_Platform.model.User;
 import com.ai.AI_Learning_Platform.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +41,8 @@ public class UserController {
     }
 
     @PostMapping
-    public Student updateUser(@RequestBody Student user) {
-        return userService.updateUser(user);
+    public Student updateUser(@RequestBody Student user, HttpSession httpSession) {
+        return userService.updateUser(user,httpSession);
     }
 
     @PutMapping("/{id}")
@@ -55,7 +56,10 @@ public class UserController {
         return ResponseEntity.ok(userService.saveUser(updatedUser));
     }
 
-
+    @DeleteMapping("{id}")
+    public void deleteStudent(@PathVariable UUID id){
+         userService.deleteUser(id);
+    }
 
     @PostMapping("/makeOrder")
     public Student makeOrder(@RequestBody Student student){

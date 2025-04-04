@@ -1,5 +1,6 @@
 package com.ai.AI_Learning_Platform.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,11 +9,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "quizzes")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -20,12 +20,12 @@ public class Quiz {
 
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference
+    @ToString.Exclude
     private Course course;
 
     private int score;
     private String userLevel;
-
-
 }

@@ -11,11 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-//@ToString(exclude = "course")
 public class CourseContent {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -26,9 +22,9 @@ public class CourseContent {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     @JsonBackReference
+    @ToString.Exclude
     private Course course;
 }

@@ -197,7 +197,7 @@ export function Interest() {
             type="text"
             placeholder="Enter your name"
             className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
-            readOnly
+            
           />
         </LabelInputContainer>
         <LabelInputContainer>

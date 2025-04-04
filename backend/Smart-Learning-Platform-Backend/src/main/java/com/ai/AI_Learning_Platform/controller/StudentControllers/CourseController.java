@@ -2,12 +2,16 @@ package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
 import com.ai.AI_Learning_Platform.model.Course;
 import com.ai.AI_Learning_Platform.model.CourseContent;
+import com.ai.AI_Learning_Platform.model.Student;
 import com.ai.AI_Learning_Platform.model.User;
 import com.ai.AI_Learning_Platform.repository.CourseContentRepository;
 import com.ai.AI_Learning_Platform.repository.CourseRepository;
+import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import com.ai.AI_Learning_Platform.service.CourseService;
 import com.ai.AI_Learning_Platform.service.GeminiService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,8 @@ public class CourseController {
     private final CourseRepository courseRepository;
     @Autowired
     private final CourseContentRepository courseContentRepository;
+    @Autowired
+    private final StudentRepository studentRepository;
 
 //    // Create Course
 //    @PostMapping
@@ -44,44 +50,49 @@ public class CourseController {
     @PostMapping("/user/{userId}")
     public ResponseEntity<?> createCourse(@PathVariable UUID userId, @RequestBody Course course) {
         try {
-            System.out.println("in create");
+            // Find user and student
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            Student student = studentRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("Student not found"));
 
-            User user = userRepository.findById(userId).orElse(null);
-            if (user == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "User not found"));
+            // Create and save course
+            Course newCourse = new Course();
+            newCourse.setTitle(course.getTitle());
+            newCourse.setDescription(course.getDescription());
+            newCourse.setLevel(course.getLevel());
+            newCourse.setCreatedByAI(true);
+            newCourse.setUser(user);
+
+            // Handle contents
+            if (course.getContents() != null && !course.getContents().isEmpty()) {
+                List<CourseContent> contents = course.getContents().stream()
+                        .map(content -> {
+                            content.setCourse(newCourse); // Set bidirectional relationship
+                            return content;
+                        })
+                        .collect(Collectors.toList());
+                newCourse.setContents(contents);
             }
 
-            System.out.println("before course");
-            Course course2 = new Course();
-            course2.setTitle(course.getTitle());
-            course2.setDescription(course.getDescription());
-            course2.setLevel(course.getLevel());
-            course2.setCreatedByAI(true);
-            course2.setUser(user);
+            // Save course (contents will be saved due to cascade)
+            Course savedCourse = courseRepository.save(newCourse);
 
-            // Save `course2` first
-            Course savedCourse = courseRepository.save(course2);
-
-            // Assign saved course to each content and save
-            List<CourseContent> updatedContents = course.getContents().stream().map(content -> {
-                content.setCourse(savedCourse);
-                return content;
-            }).collect(Collectors.toList());
-
-            List<CourseContent> savedContents = courseContentRepository.saveAll(updatedContents);
-
-            // Add contents to `savedCourse` and update it
-            savedCourse.setContents(savedContents);
-            courseRepository.save(savedCourse); // Update the course with its contents
-
-            System.out.println("saved users");
+            // Update student's courses list
+            if (student.getCourses() == null) {
+                student.setCourses(new ArrayList<>());
+            }
+            student.getCourses().add(savedCourse);
+            studentRepository.save(student);
 
             return ResponseEntity.ok(savedCourse);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Failed to create course", "details", e.getMessage()));
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", "Failed to create course", "details", e.getMessage()));
         }
     }
-
 
     // Get Course by ID
     //using

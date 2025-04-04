@@ -3,6 +3,7 @@ package com.ai.AI_Learning_Platform.model;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.engine.internal.Cascade;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.List;
 @DiscriminatorValue("STUDENT")
 @Getter
 @Setter
-@ToString()
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student extends User{
@@ -42,10 +43,14 @@ public class Student extends User{
     @ElementCollection
     private List<String> domainExpertise;
 
-    @OneToOne(mappedBy = "student")
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @JsonManagedReference
     private ChatBot chatBot;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Course> courses;
 
     private int NoOfGeneratedCourses = 0;
 }

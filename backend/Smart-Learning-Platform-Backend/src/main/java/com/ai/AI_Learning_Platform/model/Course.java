@@ -1,9 +1,7 @@
 package com.ai.AI_Learning_Platform.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,24 +14,26 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-//@ToString(exclude = "contents")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String title;
+
     @Column(length = 1000)
     private String description;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @ToString.Exclude
     private List<CourseContent> contents;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
+    @ToString.Exclude
     private User user;
 
     private String level;
@@ -41,15 +41,19 @@ public class Course {
     @JsonProperty("createdByAI")
     private Boolean createdByAI;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @ToString.Exclude
     private List<Quiz> quizzes;
 
-    public void setContents(List<CourseContent> contents) {
-        this.contents = contents;
-        if (contents != null) {
-            for (CourseContent content : contents) {
-                content.setCourse(this);
-            }
-        }
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", level='" + level + '\'' +
+                ", createdByAI=" + createdByAI +
+                '}';
     }
 }

@@ -2,9 +2,11 @@ package com.ai.AI_Learning_Platform.service;
 
 
 import com.ai.AI_Learning_Platform.model.*;
+import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -25,6 +28,9 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -39,31 +45,29 @@ public class UserService {
         return studentRepository.save(student);
     }
 
-    public Student updateUser(Student student){
-        System.out.println("id is " + student.getId() + " email is" + student.getEmail());
 
-        Optional<Student> student1 = studentRepository.findById(student.getId());
 
+    public Student updateUser(Student student, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        List<Course> courses = courseRepository.findByUserId(user.getId());
+
+        Optional<Student> student1= studentRepository.findById(user.getId());
         if(student1.isEmpty()) return null;
-
         Student student2 = student1.get();
 
-        student2.setEmail(student.getEmail());
-        student2.setCareerGoals(student.getCareerGoals());
-        student2.setDegreeProgram(student.getDegreeProgram());
-        student2.setFullName(student.getFullName());
-        student2.setDomainExpertise(student.getDomainExpertise());
-        student2.setGpaScore(student.getGpaScore());
-        student2.setMainInterest(student.getMainInterest());
-        student2.setExtracurricularActivities(student.getExtracurricularActivities());
-        student2.setGraduationYear(student.getGraduationYear());
-        student2.setResearchInterests(student.getResearchInterests());
-        student2.setTechnicalSkills(student.getTechnicalSkills());
-        student2.setUniversity(student.getUniversity());
-        student2.setPhone(student.getPhone());
-
-        studentRepository.save(student2);
-        return student2;
+        student.setOrder_id(student2.getOrder_id());
+        student.setPayment_date(student2.getPayment_date());
+        student.setRenew_date(student2.getRenew_date());
+        student.setNoOfGeneratedCourses(student2.getNoOfGeneratedCourses());
+        student.setChatBot(student2.getChatBot());
+        student.setId(user.getId());
+        student.setCourses(courses);
+        student.setRole(Role.STUDENT);
+        student.setEmail(user.getEmail());
+        student.setPassword(user.getPassword());
+        System.out.println(" no of " +  student);
+//        return student;
+        return studentRepository.save(student);
     }
 
     public Student saveUser(Student student) {
@@ -102,7 +106,7 @@ public class UserService {
     }
 
     public void deleteUser(UUID id) {
-        userRepository.deleteById(id);
+        studentRepository.deleteById(id);
     }
 
     public UUID createToken(String email){
@@ -168,6 +172,14 @@ public class UserService {
         } else if (student.getSubscription() == SUBSCRIPTION.YEARLY) {
             student.setRenew_date(calculateRenewDate(365)); // 365 days for yearly
         }
+
+        Optional<Student> student1 = studentRepository.findById(student.getId());
+        if(student1.isEmpty()) return null;
+
+        Student student2 = student1.get();
+        student.setChatBot(student2.getChatBot());
+        student.setCourses(student2.getCourses());
+        student.setNoOfGeneratedCourses(student2.getNoOfGeneratedCourses());
 
         return studentRepository.save(student);
     }
