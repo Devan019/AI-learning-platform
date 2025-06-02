@@ -1,6 +1,6 @@
 import { EvervaultCard } from "../Components/ui/evaultion-card";
 import { Navbar } from "../Components/Nav";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Modal from "../Components/ui/Modal";
 import Loader from "../Components/ui/loader";
 import { Trash2 } from "lucide-react";
+import Alert from "../Components/ui/message";
+import { fetchStudent } from "../store/StudentSlice/getStudentSlice";
 
 const Courses = () => {
   const [courseName, setCourseName] = useState("");
@@ -15,19 +17,18 @@ const Courses = () => {
   const levels = ["Beginner", "Intermediate", "Advanced", "Expert"];
   const [courses, setCourses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id,obj } = useSelector((state) => state.getUser);
+  const { id, obj } = useSelector((state) => state.getUser);
   const { student } = useSelector((state) => state.getStudent);
   const [loading, setLoading] = useState(false);
-  const [courseLimit, setcourseLimit] = useState(3)
-  const [hasReachedCourseLimit, sethasReachedCourseLimit] = useState(0);
   const [isPremiumUser, setisPremiumUser] = useState("");
+  const [alert, setAlert] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-
-
-  async function getCourses() {
+  async function getCourses(id) {
+    console.log(id , " in get function");
     try {
-      const api = await axios.get(`${import.meta.env.VITE_API}/courses/user/${id}`,{withCredentials: true});
-      
+      const api = await axios.get(`${import.meta.env.VITE_API}/courses/user/${id}`, { withCredentials: true });
       return api.data;
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -36,43 +37,57 @@ const Courses = () => {
   }
 
   useEffect(() => {
-
-    if(obj){
-      if(obj.role != 'STUDENT'){
-        navigate("/")
+    if (obj) {
+      if (obj.role != 'STUDENT') {
+        navigate("/home")
       }
     }
 
-    if (id) {
+
+    if (id && student) {
+      // dispatch(fetchStudent(id))
+      setisPremiumUser(student.order_id)
       const fetchData = async () => {
         setLoading(true);
-        
-          const response = await getCourses();
-          setCourses(response)
-          setLoading(false);
+        const response = await getCourses(id);
+        setCourses(response)
+        setLoading(false);
       };
-  
       fetchData();
-    }
-
-    if(id && student){
-      sethasReachedCourseLimit(student.noOfGeneratedCourses >= courseLimit)
-      setisPremiumUser(student.order_id)
-      console.log(student, student.noOfGeneratedCourses, student.order_id)
-      console.log(id)
     }
   }, [id, student]);
 
-  async function generateCourse(id) {
+  useEffect(() => {
+
+    if (student) {
+      setisPremiumUser(student.order_id);
+      // Dispatch only when needed
+      if (!student.order_id) { // Example condition
+        dispatch(fetchStudent(id));
+      }
+    }
+  }, [student, obj?.role]);
+
+  
+
+
+
+
+  async function generateCourseAndSaved(id) {
     try {
       setLoading(true);
       const api = await axios.post(
         `${import.meta.env.VITE_API}/gemini/course/user/${id}`,
-        { courseLevel, courseName },{withCredentials: true}
+        { courseLevel, courseName }, { withCredentials: true }
       );
-      let rawText = api.data.candidates[0].content.parts[0].text;
-      let cleanedText = rawText.replace(/```json|```/g, "").trim();
-      return JSON.parse(cleanedText);
+
+      if (api.data == "") {
+        return null;
+      }
+
+      let course = api.data;
+      return course
+
     } catch (error) {
       console.error("Error generating course:", error);
       throw error;
@@ -81,39 +96,41 @@ const Courses = () => {
     }
   }
 
-  async function saveCourse(course) {
-    try {
-      const api = await axios.post(
-        `${import.meta.env.VITE_API}/courses/user/${id}`,
-        course,
-        { withCredentials: true }
-      );
-      return api.data;
-    } catch (error) {
-      console.error("Error saving course:", error);
-      throw error;
-    }
-  }
 
-  const handleModalSubmit = async (newCourse) => {
+  const handleModalSubmit = async () => {
+    setAlert(null)
     try {
       if (!id) {
         alert("User not authenticated");
         return;
       }
 
-      const generatedCourse = await generateCourse(id);
-      const savedCourse = await saveCourse(generatedCourse);
+      // Check if user has credits
+      if (student.credits <= 0 && !isPremiumUser) {
+        setAlert({ message: "You don't have enough credits. Please upgrade your plan", type: "warning" })
+        return;
+      }
 
-      setCourses(prevCourses =>
-        Array.isArray(prevCourses)
-          ? [...prevCourses, savedCourse]
-          : [savedCourse]
-      );
-
+      const generatedCourse = await generateCourseAndSaved(id);
       setIsModalOpen(false);
       setCourseName("");
       setCourseLevel("Beginner");
+
+      if (generatedCourse == null) {
+        setAlert({ message: "Error generating course. Please try again.", type: "error" })
+        return;
+      }
+
+      // const savedCourse = await saveCourse(generatedCourse);
+
+      setCourses(prevCourses =>
+        Array.isArray(prevCourses)
+          ? [...prevCourses, generatedCourse]
+          : [generatedCourse]
+      );
+
+      dispatch(fetchStudent(id))
+
     } catch (error) {
       console.error("Error creating course:", error);
     }
@@ -138,6 +155,7 @@ const Courses = () => {
       setLoading(false);
     }
   };
+
   const handleDelete = (courseId, e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -147,13 +165,12 @@ const Courses = () => {
     }
   };
 
-  useEffect(()=>{
-    if(localStorage.getItem("CoursesRefresh")){
+  useEffect(() => {
+    if (localStorage.getItem("CoursesRefresh")) {
       localStorage.removeItem("CoursesRefresh")
       location.reload()
     }
   }, [])
-
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -180,10 +197,12 @@ const Courses = () => {
   };
 
   return (
-    <div className="dark:bg-zinc-900 bg-gray-100 min-h-screen flex flex-col items-center py-10">
+    <div className="dark:bg-black bg-gray-100 min-h-screen flex flex-col items-center py-10">
       <Navbar />
       {loading && <Loader />}
-
+      {alert && (
+        <Alert message={alert.message} type={alert.type} />
+      )}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -198,41 +217,56 @@ const Courses = () => {
         </p>
       </motion.div>
 
-      {/* Upgrade message when course limit reached */}
-      {!isPremiumUser && hasReachedCourseLimit && (
-        <motion.div 
+      {/* Upgrade message when no credits left */}
+      {student?.credits <= 0 && !isPremiumUser && (
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="mt-4 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg text-red-500 dark:text-red-400"
         >
-          <span>You've already Generated  {courseLimit} courses. </span>
-          <Link 
-            to="/upgrade" 
+          <span>You don't have any credits left. </span>
+          <Link
+            to="/upgrade"
             className="font-semibold underline hover:text-red-700 dark:hover:text-red-300 transition-colors"
           >
             Upgrade your account
           </Link>
-          <span> to create more courses.</span>
+          <span> to get more credits or premium access.</span>
         </motion.div>
       )}
 
+      {/* Show remaining credits for non-premium users */}
+      {!isPremiumUser && student?.credits > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-500 dark:text-blue-400"
+        >
+          <span>You have {student.credits} credit{student.credits !== 1 ? 's' : ''} remaining. </span>
+          <Link
+            to="/upgrade"
+            className="font-semibold underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+          >
+            Upgrade to premium
+          </Link>
+          <span> for unlimited access.</span>
+        </motion.div>
+      )}
 
-      {/* Enable button if premium user or under max courses */}
+      {/* Enable button if premium user or has credits */}
       <motion.button
-        whileHover={{ scale: (isPremiumUser || !hasReachedCourseLimit) ? 1.05 : 1 }}
-        whileTap={{ scale: (isPremiumUser || !hasReachedCourseLimit) ? 0.95 : 1 }}
-        onClick={() => (isPremiumUser || !hasReachedCourseLimit) && setIsModalOpen(true)}
-        className={`mt-6 px-6 py-3 rounded-xl transition-all duration-300 shadow-lg ${
-          (isPremiumUser || !hasReachedCourseLimit) 
-            ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/50" 
-            : "bg-gray-400 dark:bg-zinc-700 text-gray-200 cursor-not-allowed"
-        }`}
-        disabled={!isPremiumUser && hasReachedCourseLimit}
+        whileHover={{ scale: (isPremiumUser || student?.credits > 0) ? 1.05 : 1 }}
+        whileTap={{ scale: (isPremiumUser || student?.credits > 0) ? 0.95 : 1 }}
+        onClick={() => (isPremiumUser || student?.credits > 0) && setIsModalOpen(true)}
+        className={`mt-6 px-6 py-3 rounded-xl transition-all duration-300 shadow-lg ${(isPremiumUser || student?.credits > 0)
+          ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/50"
+          : "bg-gray-400 dark:bg-zinc-700 text-gray-200 cursor-not-allowed"
+          }`}
+        disabled={!isPremiumUser && student?.credits <= 0}
       >
-        {isPremiumUser ? "+ Create New Course (Premium)" : 
-         !hasReachedCourseLimit ? "+ Create New Course" : "Course Limit Reached"}
+        {isPremiumUser ? "+ Create New Course (Premium)" :
+          student?.credits > 0 ? "+ Create New Course" : "No Credits Left"}
       </motion.button>
-
 
       {loading ? (
         <div className="mt-12">

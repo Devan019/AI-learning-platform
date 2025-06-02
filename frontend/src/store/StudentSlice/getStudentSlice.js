@@ -8,6 +8,7 @@ export const fetchStudent = createAsyncThunk(
       `${import.meta.env.VITE_API}/users/student/${id}`,
       { withCredentials: true }
     );
+    
     return api.data;
   }
 );

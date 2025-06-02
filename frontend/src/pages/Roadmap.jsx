@@ -43,7 +43,7 @@ const Roadmap = () => {
   };
 
   return (
-    <div className="bg-zinc-900 min-h-screen text-gray-200">
+    <div className="bg-black min-h-screen text-gray-200">
       <Navbar />
       <div className="mt-16 max-w-5xl mx-auto p-8">
         <h1 className="text-5xl font-extrabold mb-8 text-center text-white">
@@ -90,7 +90,7 @@ const RoadmapItem = forwardRef(({ roadmap, isOpen, setOpen }, ref) => {
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
-      className="relative border border-gray-700 rounded-lg shadow-lg bg-zinc-900 hover:shadow-2xl"
+      className="relative border border-gray-700 rounded-lg shadow-lg  hover:shadow-2xl"
     >
       {/* Toggle Button */}
       <button

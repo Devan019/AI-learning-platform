@@ -21,7 +21,7 @@ export const MenuItem = ({
     <div onMouseEnter={() => setActive(item)} className="relative ">
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
+        className="flex-col  cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
       >
         {item}
       </motion.p>
@@ -52,20 +52,17 @@ export const MenuItem = ({
     </div>
   );
 };
-
-export const Menu = ({
-  setActive,
-  children,
-}) => {
+export const Menu = ({ setActive, children }) => {
   return (
     <nav
-      onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 "
+      onMouseLeave={() => setActive(null)}
+      className="relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex flex-col sm:flex-row justify-center sm:space-x-4 space-y-4 sm:space-y-0 px-8 py-6 items-center"
     >
       {children}
     </nav>
   );
 };
+
 
 export const ProductItem = ({
   title,

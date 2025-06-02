@@ -63,7 +63,7 @@ public class UserController {
 
     @PostMapping("/makeOrder")
     public Student makeOrder(@RequestBody Student student){
-        System.out.println(student  + " " + student.getEmail() + " " + student.getOrder_id());
+        System.out.println(student.getOrder_id ()  + " " + student.getId () + " " + student.getOrder_id());
         return userService.makeOrder(student);
     }
 

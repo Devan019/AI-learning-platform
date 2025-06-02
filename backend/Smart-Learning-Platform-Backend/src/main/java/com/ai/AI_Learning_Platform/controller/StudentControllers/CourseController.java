@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,12 @@ public class CourseController {
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
             Student student = studentRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("Student not found"));
+
+            if(student.getCredits () <= 0){
+                return ResponseEntity
+                        .status( HttpStatus.FORBIDDEN)
+                        .body("Your plan is over or limited. Please upgrade your plan.");
+            }
 
             // Create and save course
             Course newCourse = new Course();

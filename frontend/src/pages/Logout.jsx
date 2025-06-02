@@ -14,7 +14,7 @@ const Logout = () => {
     const data = api.data;
     
     localStorage.removeItem("login");
-    navigate("/");
+    navigate("/home");
   }
 
   useEffect(()=>{

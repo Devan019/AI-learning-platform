@@ -1,15 +1,11 @@
 import { Route, Routes} from "react-router-dom"
-import Home from "./pages/Home"
 import Chatbot from "./pages/Chatbot"
 import Courses from "./pages/Courses"
 import Roadmap from "./pages/Roadmap"
 import OneCourse from "./pages/OneCourse"
-import { Rewards } from "./pages/Reward"
-import {Store} from "./pages/Store"
 import Quiz from "./pages/Quiz"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
-import Protect from "./Protect/StudentProtect"
 import Logout from "./pages/Logout"
 import AIForm from "./pages/AIForm"
 import { useDispatch, useSelector } from "react-redux"
@@ -45,6 +41,7 @@ const App = () => {
   return (
   <Routes>
     <Route path="/" element={<AppLoader />} />
+    <Route path="/home" element={<AI3D />} />
     <Route path="/chatbot" element={<Chatbot />} />
     <Route path="/courses" element={<Courses />} />
     <Route path="/roadmap" element={<Roadmap />} />
@@ -62,7 +59,7 @@ const App = () => {
     <Route path="/signup" element = {<Signup />} />
     <Route path="/admin" element = {<AdminProtect><AdminDashboard /></AdminProtect>} />
     <Route path="/adminlogin" element={<AdminLogin />} />
-    <Route path="*" element={<Home />} />
+    <Route path="*" element={<AI3D />} />
   </Routes>
   )
 }

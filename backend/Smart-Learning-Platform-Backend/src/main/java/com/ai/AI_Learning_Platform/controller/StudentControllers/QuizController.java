@@ -24,3 +24,4 @@ public class QuizController {
         return quizService.getQuizzesReports(course_id);
     }
 }
+

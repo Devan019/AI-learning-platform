@@ -22,7 +22,7 @@ const Protect = ({ children }) => {
     
     // If user exists but isn't a STUDENT, redirect to home
     if (obj.role !== "STUDENT") {
-      navigate("/");
+      navigate("/home");
     }
   }, [obj, navigate, hasCheckedInitially]);
 

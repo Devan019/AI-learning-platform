@@ -99,7 +99,7 @@ const ProfilePage = () => {
 
 
   return (
-    <div className="min-h-screen bg-zinc-900 overflow-hidden">
+    <div className="min-h-screen bg-black overflow-hidden">
       <Navbar />
 
       <motion.div

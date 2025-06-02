@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import AILoader from "../Components/AILoader"
-import Home from './Home';
 import AI3D from './HomeUse3d';
 
 const AppLoader = () => {

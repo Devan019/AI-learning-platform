@@ -4,6 +4,7 @@ import axios from "axios";
 
 export const fetchUser = createAsyncThunk("/getUser/fetchUser", async() => {
   const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`, {withCredentials : true})
+  // console.log(api.data)
   return api.data
 })
 

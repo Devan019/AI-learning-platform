@@ -30,12 +30,8 @@ public class Student extends User{
     private String phone;
 
     private String order_id;
-    @Column(columnDefinition = "DATETIME")
-    private Date payment_date;
-    @Column(columnDefinition = "DATETIME")
-    private Date renew_date;
-    @Enumerated(value = EnumType.STRING)
-    private SUBSCRIPTION subscription;
+
+    private int credits = 30;
 
     @ElementCollection
     private List<String> technicalSkills;

@@ -6,16 +6,13 @@ import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -56,8 +53,7 @@ public class UserService {
         Student student2 = student1.get();
 
         student.setOrder_id(student2.getOrder_id());
-        student.setPayment_date(student2.getPayment_date());
-        student.setRenew_date(student2.getRenew_date());
+        student.setCredits (student2.getCredits ());
         student.setNoOfGeneratedCourses(student2.getNoOfGeneratedCourses());
         student.setChatBot(student2.getChatBot());
         student.setId(user.getId());
@@ -164,15 +160,7 @@ public class UserService {
     }
 
     public Student makeOrder(Student student){
-        student.setPayment_date( new Date());
-
-        // Set renew date based on subscription type
-        if (student.getSubscription() == SUBSCRIPTION.MONTHLY) {
-            student.setRenew_date(calculateRenewDate(30)); // 30 days for monthly
-        } else if (student.getSubscription() == SUBSCRIPTION.YEARLY) {
-            student.setRenew_date(calculateRenewDate(365)); // 365 days for yearly
-        }
-
+        System.out.println (student );
         Optional<Student> student1 = studentRepository.findById(student.getId());
         if(student1.isEmpty()) return null;
 
@@ -181,7 +169,12 @@ public class UserService {
         student.setCourses(student2.getCourses());
         student.setNoOfGeneratedCourses(student2.getNoOfGeneratedCourses());
 
+
+        System.out.println ("student2 is " + student );
         return studentRepository.save(student);
+
+//        System.out.println ( student );
+//        return student;
     }
 
     public Student getStudent(UUID uuid){
@@ -194,8 +187,6 @@ public class UserService {
         Optional<Student> student = studentRepository.findById(uuid);
         if( student.isEmpty()) return null;
         Student student1 = student.get();
-        student1.setRenew_date(null);
-        student1.setPayment_date(null);
         student1.setOrder_id(null);
         return  studentRepository.save(student1);
     }
@@ -204,6 +195,8 @@ public class UserService {
         System.out.println("email is " + email);
         return studentRepository.findByEmail(email);
     }
+
+
 
 
 }

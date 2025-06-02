@@ -8,12 +8,14 @@ import { Loader } from 'lucide-react'
 import { useDispatch } from 'react-redux'
 import { setuserdata } from '../store/UserStore/setUserSlice'
 import { resetPasswordEmailTemplate } from '../../public/mailTempletes/resetpassword'
+import Alert from '../Components/ui/message'
 
 const Login = () => {
   const [loading, setloading] = useState("hidden")
   const navigate = useNavigate();
   const [passworderror, setpassworderror] = useState("")
   const dispatch = useDispatch()
+  const [alert, setAlert] = useState(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -61,11 +63,15 @@ const Login = () => {
 
   async function checkUser() {
     try {
+      setAlert(null)
       const api = await axios.post(`${import.meta.env.VITE_API}/auth/login`, formData, { withCredentials: true });
       const data = api.data;
-      console.log(data);
       return data;
-    }catch(e){
+    } catch (e) {
+      console.log(e.response.status)
+      if(e.response.status == 401){
+        setAlert({ message: "User doesn't exist", type: 'error' });
+      }
       return ""
     }
   }
@@ -74,11 +80,13 @@ const Login = () => {
   async function main() {
     setloading("");
     const data = await checkUser();
-    if (data == "") alert("user doen't exit");
+    if (data == "") {
+      return null;
+    }
     else {
       localStorage.setItem("login", true);
       localStorage.setItem("HomeRefresh", true);
-      navigate("/");
+      navigate("/home");
     }
     dispatch(setuserdata({
       userd: data.id,
@@ -102,6 +110,10 @@ const Login = () => {
   return (
     <div className='bg-zinc-900 min-h-screen flex flex-col items-center justify-center'>
       <Navbar />
+      {alert && (
+        <Alert message={alert.message} type={alert.type} />
+      )}
+
       <div className='mt-16'>
         <FormContainer
           loading={loading}
@@ -168,7 +180,7 @@ const Login = () => {
 
 
 const FormContainer = ({ title, handleSubmit, children, loading }) => (
-  <div className="mt-8 w-[40vw] mx-auto p-8 shadow-2xl border border-gray-700 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 text-white">
+  <div className="mt-8 w-full sm:w-[60vw] lg:w-[40vw] mx-auto p-8 shadow-2xl border border-gray-700 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 text-white">
     <div className={`${loading}`}>
       <Loader />
     </div>

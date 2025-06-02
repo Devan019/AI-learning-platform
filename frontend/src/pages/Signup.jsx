@@ -166,7 +166,7 @@ const Signup = () => {
 
 
 const FormContainer = ({ title, handleSubmit, children, loading }) => (
-  <div className="mt-8  w-[40vw] mx-auto p-8 shadow-2xl border border-gray-700 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 text-white">
+  <div className="mt-8 w-full sm:w-[60vw] lg:w-[40vw] mx-auto p-8 shadow-2xl border border-gray-700 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 text-white">
     <div className={`${loading}`}>
       <Loader />
     </div>

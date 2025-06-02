@@ -114,14 +114,14 @@ const OneCourse = () => {
 
   if (loading) {
     return (
-      <div className="bg-zinc-900 min-h-screen flex flex-col items-center justify-center text-white">
+      <div className="bg-black min-h-screen flex flex-col items-center justify-center text-white">
         <div className="text-2xl">Loading course...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-zinc-900 min-h-screen flex flex-col items-center text-white">
+    <div className="bg-black min-h-screen flex flex-col items-center text-white">
       <Navbar />
       <div className="w-3/5 mt-26">
         <h1 className="text-4xl font-bold text-center">

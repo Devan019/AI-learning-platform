@@ -228,9 +228,9 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="bg-zinc-950 h-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="bg-black h-screen flex flex-col items-center justify-center relative overflow-hidden">
       <Navbar />
-      <BackgroundLines className="bg-zinc-950 absolute inset-0" />
+      <BackgroundLines className="bg-black absolute inset-0" />
 
       <div className="z-20 w-full max-w-6xl h-[80vh] flex relative mt-16">
         {/* Sidebar */}

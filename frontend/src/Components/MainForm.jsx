@@ -71,22 +71,6 @@ export function Interest() {
   }
   
 
-  async function genrateCourse(id) {
-    console.log("generate course");
-    const api = await axios.get(
-      `${import.meta.env.VITE_API}/gemini/course/user/${id}`,
-      {withCredentials: true}
-    );
-    let rawText = api.data.candidates[0].content.parts[0].text;
-
-    // Remove triple backticks and possible language identifiers
-    let cleanedText = rawText.replace(/```json|```/g, "").trim();
-
-    // Parse the cleaned text into JSON
-    let jsonData = JSON.parse(cleanedText);
-
-    return jsonData;
-  }
 
   async function updateUser() {
     console.log("create user",  formData);
@@ -96,11 +80,6 @@ export function Interest() {
     return api.data.id;
   }
 
-  async function saveCourse(course, id){
-    console.log("save course");
-    const api = await axios.post(`${import.meta.env.VITE_API}/courses/user/${id}`,course,{withCredentials:true} )
-    console.log(api.data);
-  }
 
   async function main() {
     setloading("");
