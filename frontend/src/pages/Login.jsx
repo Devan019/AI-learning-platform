@@ -68,8 +68,8 @@ const Login = () => {
       const data = api.data;
       return data;
     } catch (e) {
-      console.log(e.response.status)
-      if(e.response.status == 401){
+      // console.log(e.response.status)
+      if(e?.response?.status == 401){
         setAlert({ message: "User doesn't exist", type: 'error' });
       }
       return ""
