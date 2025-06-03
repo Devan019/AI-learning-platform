@@ -31,7 +31,7 @@ class GenCourse {
 
 @RestController
 @RequestMapping("/api/gemini")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
+@CrossOrigin(origins = "${frontend.uri}", allowCredentials = "true", allowedHeaders = "*")
 public class AIController {
 
     @Autowired
