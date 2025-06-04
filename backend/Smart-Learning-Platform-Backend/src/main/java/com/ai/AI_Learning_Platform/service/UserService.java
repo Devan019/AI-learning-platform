@@ -61,7 +61,7 @@ public class UserService {
         student.setRole(Role.STUDENT);
         student.setEmail(user.getEmail());
         student.setPassword(user.getPassword());
-        System.out.println(" no of " +  student);
+//        System.out.println(" no of " +  student);
 //        return student;
         return studentRepository.save(student);
     }
@@ -70,27 +70,27 @@ public class UserService {
 
         User user1 = userRepository.findByEmail(student.getEmail());
         if(user1 != null){
-            System.out.println("user exit" + user1);
+//            System.out.println("user exit" + user1);
             return null;
         }
 
-        System.out.println("saved " + student);
+//        System.out.println("saved " + student);
         student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
         student.setRole(Role.STUDENT);
         return userRepository.save(student);
     }
 
     public User isVaildUser(User user, HttpSession httpSession){
-        System.out.println("Checking email: " + user.getEmail() + " role is " + user.getRole());
+//        System.out.println("Checking email: " + user.getEmail() + " role is " + user.getRole());
 
         User user1 = userRepository.findByEmail(user.getEmail().trim());
 
         if(user.getRole() != Role.STUDENT || user1 == null)   throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
-        System.out.println("all done");
+//        System.out.println("all done");
         if(!bCryptPasswordEncoder.matches(user.getPassword(), user1.getPassword()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found ");
 
-        System.out.println("password match");
+//        System.out.println("password match");
 
         Object obj = httpSession.getAttribute("user");
         if(obj != null){
@@ -132,7 +132,7 @@ public class UserService {
     }
 
     public User changePassword(User userInfo){
-        System.out.println(userInfo.getEmail() + " " + userInfo.getResetToken() + " " + "set");
+//        System.out.println(userInfo.getEmail() + " " + userInfo.getResetToken() + " " + "set");
         User user1 = null;
         List<User> users = userRepository.findAll();
         for (var checkUser: users){
@@ -144,10 +144,10 @@ public class UserService {
 
 
         if(user1 == null) return null;
-        System.out.println("user found");
+//        System.out.println("user found");
 
         if(!user1.getResetToken().equals(userInfo.getResetToken())) return  null;
-        System.out.println("code getit");
+//        System.out.println("code getit");
         user1.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
         user1.setResetToken(null);
         return userRepository.save(user1);
@@ -160,7 +160,7 @@ public class UserService {
     }
 
     public Student makeOrder(Student student){
-        System.out.println (student );
+//        System.out.println (student );
         Optional<Student> student1 = studentRepository.findById(student.getId());
         if(student1.isEmpty()) return null;
 
@@ -170,7 +170,7 @@ public class UserService {
         student.setNoOfGeneratedCourses(student2.getNoOfGeneratedCourses());
 
 
-        System.out.println ("student2 is " + student );
+//        System.out.println ("student2 is " + student );
         return studentRepository.save(student);
 
 //        System.out.println ( student );
@@ -192,7 +192,7 @@ public class UserService {
     }
 
     public Student getUserByEmail(String email){
-        System.out.println("email is " + email);
+//        System.out.println("email is " + email);
         return studentRepository.findByEmail(email);
     }
 

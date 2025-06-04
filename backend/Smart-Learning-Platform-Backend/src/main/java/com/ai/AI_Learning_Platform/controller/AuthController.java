@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
+//@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class AuthController {
 
     @Autowired
@@ -49,19 +49,19 @@ public class AuthController {
     //using
     @GetMapping("/user")
     public Object getCurrentUser(HttpSession httpSession){
-        System.out.println("in home");
+//        System.out.println("in home");
         return httpSession.getAttribute("user");
     }
 
     //using
     @GetMapping("/logout")
     public ResponseEntity<?> doLogout(HttpSession httpSession){
-        System.out.println("in logout");
+//        System.out.println("in logout");
         try{
             httpSession.removeAttribute("user");
             return ResponseEntity.ok(200);
         } catch (Exception e) {
-            System.out.println(e);
+//            System.out.println(e);
             return  ResponseEntity.ok(500);
         }
     }

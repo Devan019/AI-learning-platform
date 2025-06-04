@@ -32,12 +32,12 @@ public class AdminService {
     }
 
     public User findAdmin(String email){
-        System.out.println(email + " check");
+//        System.out.println(email + " check");
 
         User admin1 = null;
         List<User> admins = userRepository.findAll();
         for(var adminTemp: admins){
-            System.out.println(adminTemp.getEmail() + " in loop");
+//            System.out.println(adminTemp.getEmail() + " in loop");
             if(adminTemp.getEmail().trim().equals(email.trim())){
                 admin1 = adminTemp;
                 break;
@@ -46,16 +46,16 @@ public class AdminService {
         return admin1;
     }
     public User loginAsAdmin(User admin, HttpSession session){
-        System.out.println(adminRepository.findAll().size() + " size");
-        System.out.println("in function");
+//        System.out.println(adminRepository.findAll().size() + " size");
+//        System.out.println("in function");
         User admin1 = findAdmin(admin.getEmail());
-        System.out.println(admin1 );
+//        System.out.println(admin1 );
         if(admin1 == null) return null;
-        System.out.println(admin1 + " admin is found");
-        System.out.println(admin1.getRole() + " " + admin1.getPassword());
+//        System.out.println(admin1 + " admin is found");
+//        System.out.println(admin1.getRole() + " " + admin1.getPassword());
 
         if( (admin1.getRole() != Role.ADMIN) || (!bCryptPasswordEncoder.matches(admin.getPassword(), admin1.getPassword())) ) return null;
-        System.out.println("found ");
+//        System.out.println("found ");
         Object obj = session.getAttribute("user");
         if(obj != null){
             session.removeAttribute("user");

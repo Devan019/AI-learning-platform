@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
+//@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -63,7 +63,7 @@ public class UserController {
 
     @PostMapping("/makeOrder")
     public Student makeOrder(@RequestBody Student student){
-        System.out.println(student.getOrder_id ()  + " " + student.getId () + " " + student.getOrder_id());
+//        System.out.println(student.getOrder_id ()  + " " + student.getId () + " " + student.getOrder_id());
         return userService.makeOrder(student);
     }
 

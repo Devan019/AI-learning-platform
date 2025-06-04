@@ -2,11 +2,22 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
-export const fetchUser = createAsyncThunk("/getUser/fetchUser", async() => {
-  const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`, {withCredentials : true})
-  // console.log(api.data)
-  return api.data
-})
+export const fetchUser = createAsyncThunk("/getUser/fetchUser", async () => {
+  try {
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/user`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      withCredentials: true,
+    });
+    console.log("Response data:", api.data);
+    return api.data;
+  } catch (err) {
+    console.error("Fetch user failed:", err);
+    throw err;
+  }
+});
 
 export const getUser = createSlice({
   name :'getUser',

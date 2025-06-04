@@ -43,7 +43,7 @@ public class ChatService {
 
 
     public Chat createChat(UUID userid, String topic, Chat chat) {
-        System.out.println("in");
+//        System.out.println("in");
         ChatBot chatBot = getChatBot(userid);
 
         // If chatbot doesn't exist, create a new one
@@ -52,7 +52,7 @@ public class ChatService {
             chatBot = getChatBot(userid); // Get the newly created chatbot
         }
 
-        System.out.println("chatbot found");
+//        System.out.println("chatbot found");
 
         // Initialize chats map if null
         if (chatBot.getChats() == null) {
@@ -64,11 +64,11 @@ public class ChatService {
 
         // Add the new chat
         chats.add(chat);
-        System.out.println("added");
+//        System.out.println("added");
 
         // Save the updated chatbot
         chatBotRepository.save(chatBot);
-        System.out.println("save thai gayu");
+//        System.out.println("save thai gayu");
 
         return chat;
     }

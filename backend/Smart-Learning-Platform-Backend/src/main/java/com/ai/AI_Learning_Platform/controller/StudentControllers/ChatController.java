@@ -19,7 +19,7 @@ public class ChatController {
 
     @PostMapping("/user/{userid}/{topic}/newchat")
     public Map<String, List<Chat>> createChat(@RequestBody Chat chat, @PathVariable UUID userid, @PathVariable String topic){
-        System.out.println(chat + " " + userid);
+//        System.out.println(chat + " " + userid);
         return chatService.createNew(userid, topic);
     }
 

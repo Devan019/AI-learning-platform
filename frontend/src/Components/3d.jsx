@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudent } from '../store/StudentSlice/getStudentSlice';
+import { fetchUser } from '../store/UserStore/setUserSlice';
 
 // Enhanced AICore component with darker aesthetics
 const AICore = ({ activeSector }) => {
@@ -315,12 +316,16 @@ const TechSectorSphere = () => {
   const containerRef = useRef();
   const [activeSector, setActiveSector] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(()=>{
     if(localStorage.getItem("HomeRefresh")){
       localStorage.removeItem("HomeRefresh")
       location.reload();
     }
+
+    dispatch(fetchUser())
+    
   },[])
 
 

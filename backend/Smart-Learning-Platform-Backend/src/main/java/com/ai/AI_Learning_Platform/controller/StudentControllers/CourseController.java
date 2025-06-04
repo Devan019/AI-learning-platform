@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/courses")
-@CrossOrigin(origins = "$http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
+//@CrossOrigin(origins = "$http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 @RequiredArgsConstructor
 @ToString
 public class CourseController {

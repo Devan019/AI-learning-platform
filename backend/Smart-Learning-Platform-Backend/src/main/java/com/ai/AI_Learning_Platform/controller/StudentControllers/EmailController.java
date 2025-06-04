@@ -28,7 +28,7 @@ public class EmailController {
     public String sendMailWithAttachment(
             @RequestBody EmailDetails details)
     {
-        System.out.println (details );
+//        System.out.println (details );
 
         return emailService.sendMailWithAttachment(details);
     }

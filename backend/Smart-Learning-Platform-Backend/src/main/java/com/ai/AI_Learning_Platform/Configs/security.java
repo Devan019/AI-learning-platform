@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -63,5 +65,14 @@ public class security {
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };
+    }
+
+    @Bean
+    public CookieSerializer cookieSerializer() {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer ();
+        serializer.setSameSite("None"); // ✅ Cross-site cookie allowed
+        serializer.setUseSecureCookie(true); // ✅ Required when SameSite=None
+        serializer.setCookieName("JSESSIONID");
+        return serializer;
     }
 }

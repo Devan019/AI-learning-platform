@@ -46,7 +46,7 @@ const Courses = () => {
 
     if (id && student) {
       // dispatch(fetchStudent(id))
-      setisPremiumUser(student.order_id)
+      setisPremiumUser(student?.order_id)
       const fetchData = async () => {
         setLoading(true);
         const response = await getCourses(id);
@@ -57,16 +57,16 @@ const Courses = () => {
     }
   }, [id, student]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (student) {
-      setisPremiumUser(student.order_id);
-      // Dispatch only when needed
-      if (!student.order_id) { // Example condition
-        dispatch(fetchStudent(id));
-      }
-    }
-  }, [student, obj?.role]);
+  //   if (student) {
+  //     setisPremiumUser(student.order_id);
+  //     // Dispatch only when needed
+  //     if (!student.order_id) { // Example condition
+  //       dispatch(fetchStudent(id));
+  //     }
+  //   }
+  // }, [student, obj?.role]);
 
   
 
@@ -165,12 +165,6 @@ const Courses = () => {
     }
   };
 
-  useEffect(() => {
-    if (localStorage.getItem("CoursesRefresh")) {
-      localStorage.removeItem("CoursesRefresh")
-      location.reload()
-    }
-  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -264,7 +258,7 @@ const Courses = () => {
           }`}
         disabled={!isPremiumUser && student?.credits <= 0}
       >
-        {isPremiumUser ? "+ Create New Course (Premium)" :
+        {isPremiumUser ? "+ Create New Course" :
           student?.credits > 0 ? "+ Create New Course" : "No Credits Left"}
       </motion.button>
 

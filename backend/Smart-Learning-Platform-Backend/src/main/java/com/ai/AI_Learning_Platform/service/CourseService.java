@@ -28,12 +28,12 @@ public class CourseService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        System.out.println("Received Course: " + course);
+//        System.out.println("Received Course: " + course);
         course.setUser(user);
-        System.out.println("after set user");
+//        System.out.println("after set user");
         // Save the course first
         Course savedCourse = courseRepository.save(course);
-        System.out.println("after sve course");
+//        System.out.println("after sve course");
 
         // If contents exist, associate them with the saved course
         if (course.getContents() != null) {
@@ -43,7 +43,7 @@ public class CourseService {
             }
             courseContentRepository.saveAll(course.getContents());
         }
-        System.out.println("done vhai");
+//        System.out.println("done vhai");
 
         return savedCourse;
     }
