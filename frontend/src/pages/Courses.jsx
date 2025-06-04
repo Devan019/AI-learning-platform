@@ -101,7 +101,7 @@ const Courses = () => {
     setAlert(null)
     try {
       if (!id) {
-        alert("User not authenticated");
+        setAlert({message : "User not authenticated"});
         return;
       }
 
@@ -150,7 +150,7 @@ const Courses = () => {
       );
     } catch (error) {
       console.error("Error deleting course:", error);
-      alert("Failed to delete course. Please try again.");
+      setAlert({message : "Failed to delete course. Please try again.", type:"error"});
     } finally {
       setLoading(false);
     }

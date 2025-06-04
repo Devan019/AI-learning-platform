@@ -199,7 +199,7 @@ export function QuizApp() {
     let newDifficulty = difficulty;
     if (isCorrect) {
       // Increase difficulty
-      if (difficulty === "easy") {
+      if (difficulty === "easy" || difficulty === "Beginner") {
         newDifficulty = "medium";
       } else if (difficulty === "medium") {
         newDifficulty = "hard";
@@ -210,7 +210,7 @@ export function QuizApp() {
       if (difficulty === "hard") {
         newDifficulty = "medium";
       } else if (difficulty === "medium") {
-        newDifficulty = "easy";
+        newDifficulty = "Beginner";
       }
       // If already easy, stay at easy
     }

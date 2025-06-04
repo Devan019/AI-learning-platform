@@ -31,7 +31,7 @@ class GenCourse {
 
 @RestController
 @RequestMapping("/api/gemini")
-@CrossOrigin(origins = "${frontend.uri}", allowCredentials = "true", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class AIController {
 
     @Autowired
@@ -143,7 +143,7 @@ public class AIController {
     //using
     @GetMapping("/question/{course}/{difficulty}")
     public String generateQuestion(@PathVariable String course, @PathVariable String difficulty) {
-//        System.out.println (course + " " + difficulty );
+        System.out.println (course + " " + difficulty );
         String quiz =  geminiService.generateContent("Generate a multiple-choice question in JSON format. for this course " + course + " give me unique question everytime" +
                 "and format should be like this " +
                 "{ question: What is the capital of France?" +

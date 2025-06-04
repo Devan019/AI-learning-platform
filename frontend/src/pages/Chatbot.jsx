@@ -36,22 +36,22 @@ const Chatbot = () => {
     try {
       const api = await axios.get(`${import.meta.env.VITE_API}/gemini/chatbot/${input}`,{withCredentials : true});
       const geminiReply = api.data;
-      console.log("Raw Gemini response:", geminiReply);
+      // console.log("Raw Gemini response:", geminiReply);
       
-      // Handle different response formats
-      let jsonText;
-      if (geminiReply.candidates && geminiReply.candidates[0]?.content?.parts[0]?.text) {
-        jsonText = geminiReply.candidates[0].content.parts[0].text;
-      } else if (geminiReply.text) {
-        // If response is already in the expected format
-        return { reply: geminiReply.text };
-      } else {
-        // If response is a simple string
-        return { reply: JSON.stringify(geminiReply) };
-      }
+      // // Handle different response formats
+      // let jsonText;
+      // if (geminiReply.candidates && geminiReply.candidates[0]?.content?.parts[0]?.text) {
+      //   jsonText = geminiReply.candidates[0].content.parts[0].text;
+      // } else if (geminiReply.text) {
+      //   // If response is already in the expected format
+      //   return { reply: geminiReply.text };
+      // } else {
+      //   // If response is a simple string
+      //   return { reply: JSON.stringify(geminiReply) };
+      // }
   
       // Clean and parse the JSON
-      const cleanedText = jsonText.replace(/```json|```/g, "").trim();
+      const cleanedText = geminiReply.replace(/```json|```/g, "").trim();
       console.log("Cleaned text:", cleanedText);
       
       try {

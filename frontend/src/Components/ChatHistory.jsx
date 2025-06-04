@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Edit2, MessageSquare, PlusCircle, Send, Trash2 } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const ChatHistory = (
   { allChats, activeChat, setActiveChat, editingChatId, newChatTitle, setNewChatTitle, sidebarOpen, formatChatTitle, setEditingChatId,setAllChats ,setChatTitles, chatTitles, id, createNewChat}
 ) => {
+  const [alert, setalert] = useState(null)
 
   const deleteChat = async (chatId, e) => {
     e.stopPropagation();
@@ -35,7 +36,7 @@ const ChatHistory = (
       }
     } catch (error) {
       console.error("Error deleting chat:", error);
-      alert("Failed to delete chat. Please try again.");
+      setalert({message : "Failed to delete chat. Please try again.", type:"error"});
     }
   };
 
@@ -47,7 +48,7 @@ const ChatHistory = (
 
   const handlechangeNameFromDb = async() => {
      const response  = await changeNameFromDb();
-     if(response == null) alert("problem at backend")
+     if(response == null) setalert({message: "problem at backend", type: "error"})
   }
 
   const loadChats = async (topic) => {
@@ -142,7 +143,7 @@ const ChatHistory = (
       location.reload()
     } catch (error) {
       console.error("Error renaming chat:", error);
-      alert("Failed to rename chat. Please try again.");
+      setalert({message:"Failed to rename chat. Please try again.", type: "error"});
     }
   };
 

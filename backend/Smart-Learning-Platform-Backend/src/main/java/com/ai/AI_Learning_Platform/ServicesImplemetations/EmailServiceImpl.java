@@ -40,11 +40,13 @@ public class EmailServiceImpl implements EmailService {
 
             // Sending the mail
             javaMailSender.send(mailMessage);
+            System.out.println ("mail sent" );
             return "Mail Sent Successfully...";
         }
 
         // Catch block to handle the exceptions
         catch (Exception e) {
+            System.out.println (e );
             return "Error while Sending Mail";
         }
     }
@@ -54,6 +56,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public String sendMailWithAttachment(EmailDetails details)
     {
+        System.out.println (details );
         // Creating a mime message
         MimeMessage mimeMessage
                 = javaMailSender.createMimeMessage();
@@ -81,11 +84,13 @@ public class EmailServiceImpl implements EmailService {
 
             // Sending the mail
             javaMailSender.send(mimeMessage);
+            System.out.println (("mail sent") );
             return "Mail sent Successfully";
         }
 
         // Catch block to handle MessagingException
         catch (MessagingException e) {
+            System.out.println (e );
 
             // Display message when exception occurred
             return "Error while sending mail!!!";

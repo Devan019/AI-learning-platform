@@ -4,6 +4,7 @@ import { FiMail, FiLock, FiKey, FiArrowRight, FiHome } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { otpEmailTemplate } from '../../public/mailTempletes/sendotp';
+import Alert from '../Components/ui/message';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -13,23 +14,26 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [alert, setalert] = useState(false)
   const navigate = useNavigate();
 
   // Handle login form submission
 
 
-  const generateOtp = async(admin) => {
-    
+  const generateOtp = async (admin) => {
+    setalert(null)
 
-    const response = await axios.post(`${import.meta.env.VITE_API}/admin/getotp`,admin, {withCredentials : true}); 
+
+    const response = await axios.post(`${import.meta.env.VITE_API}/admin/getotp`, admin, { withCredentials: true });
 
     const otp = response.data;
-    if(otp == 0){
-      alert("backend error")
+    if (otp == 0) {
+      Alert({ message: "backend error", type: "error" })
+      setalert(true)
       return
     }
 
-    console.log("otp get "+ otp);
+    console.log("otp get " + otp);
 
     const templateSendotp = otpEmailTemplate(admin.email, otp);
     const obj = {
@@ -37,14 +41,14 @@ const AdminLogin = () => {
       msgBody: templateSendotp,
       subject: "verify your account !!!"
     }
-    const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`,obj, {withCredentials : true}); 
+    const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`, obj, { withCredentials: true });
 
     console.log(api.data)
     setLoading(false);
-    
+
   }
 
-  const main = async(admin) => {
+  const main = async (admin) => {
     await generateOtp(admin);
   }
 
@@ -56,19 +60,19 @@ const AdminLogin = () => {
     try {
 
       const obj = {
-        email : email,
-        password : password
+        email: email,
+        password: password
       }
-      
-      const response = await axios.post(`${import.meta.env.VITE_API}/auth/admin/login`,obj, {withCredentials : true}); 
-      
+
+      const response = await axios.post(`${import.meta.env.VITE_API}/auth/admin/login`, obj, { withCredentials: true });
+
       const data = response.data;
       console.log(data)
       const obj2 = {
         ...data,
         otp: 0
       }
-      
+
       if (!data.id) {
         throw new Error(data.message || 'Invalid credentials');
       }
@@ -78,7 +82,7 @@ const AdminLogin = () => {
     } catch (err) {
       setError(err.message);
       setLoading(false);
-    } 
+    }
   };
 
   // Handle OTP generation and sending
@@ -116,9 +120,9 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API}/admin/checkOtp`,{
+      const response = await axios.post(`${import.meta.env.VITE_API}/admin/checkOtp`, {
         otp: otp
-      }, {withCredentials : true})
+      }, { withCredentials: true })
 
       const data = response.data;
 
@@ -137,6 +141,9 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      {alert && (
+        <Alert message={alert.message} type={alert.type} />
+      )}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -303,8 +310,8 @@ const AdminLogin = () => {
             {/* Admin Request Link - Added below the form */}
             <div className="mt-6 text-center text-sm text-zinc-400">
               Need admin access?{' '}
-              <a 
-                href="mailto:admin@example.com" 
+              <a
+                href="mailto:admin@example.com"
                 className="text-indigo-400 hover:underline"
               >
                 Request access via email

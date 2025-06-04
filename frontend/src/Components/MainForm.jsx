@@ -7,6 +7,7 @@ import domainsSuggestions from "../data/domains.data.json";
 import axios from "axios";
 import Loader from "./ui/loader";
 import { useSelector } from "react-redux";
+import Alert from "./ui/message";
 
 export function Interest() {
   const [loading, setloading] = useState("hidden")
@@ -18,6 +19,7 @@ export function Interest() {
   const [passworderror, setpassworderror] = useState("")
   const {id,email}  = useSelector((state)=>state.getUser);
   const {student} = useSelector((state) => state.getStudent)
+  const [alert, setalert] = useState(null)
 
   
   const [formData, setFormData] = useState({
@@ -137,11 +139,11 @@ export function Interest() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.technicalSkills.length === 0) {
-      alert("Please add at least one skill");
+      setalert({message :"Please add at least one skill", type: "warning"});
       return;
     }
     if (formData.domainExpertise.length === 0) {
-      alert("Please select at least one domain");
+      setalert({message:"Please select at least one domain", type:"warning"});
       return;
     }
 
@@ -163,6 +165,9 @@ export function Interest() {
       title="Student Profile & Interests"
       handleSubmit={handleSubmit}
     >
+      {alert && (
+              <Alert message={alert.message} type={alert.type} />
+            )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <LabelInputContainer>
           <Label htmlFor="name">

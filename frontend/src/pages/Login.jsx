@@ -39,6 +39,7 @@ const Login = () => {
       msgBody: template,
       subject: "🔑 Reset Your Password - Action Required"
     })
+    console.log(api.data)
     setloading("hidden")
 
   }
@@ -46,16 +47,17 @@ const Login = () => {
   const forgotPassword = async () => {
     const exitUser = await checkUser()
     if (!exitUser) {
-      alert("user is not exit");
+      setAlert({message :"user is not exit", type :"warning"});
     } else {
       await callForgotPassword();
-      alert("🥳show your mail ✔️")
+      setAlert({message : "🥳show your mail ✔️", type : "success"})
+      
     }
   }
 
   const handelForgetPassword = () => {
     if (!formData.email) {
-      alert("enter your mail")
+      setAlert({message : "enter your mail", type : "warning"})
     } else {
       forgotPassword()
     }

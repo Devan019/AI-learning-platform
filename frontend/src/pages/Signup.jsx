@@ -6,11 +6,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Loader } from 'lucide-react'
 import { signupEmailTemplate } from '../../public/mailTempletes/signup'
+import Alert from '../Components/ui/message'
 
 const Signup = () => {
   const [loading, setloading] = useState("hidden")
   const navigate = useNavigate();
   const [passworderror, setpassworderror] = useState("")
+  const [alert, setalert] = useState(null)
 
 
   const [formData, setFormData] = useState({
@@ -50,7 +52,7 @@ const Signup = () => {
       navigate("/login");
     }else{
       setloading("hidden");
-      alert("user already exit");
+      setalert({message:"user already exit",type:"error"});
     }
   }
 
@@ -73,6 +75,9 @@ const Signup = () => {
   };
   return (
     <div className='bg-zinc-900 min-h-screen flex flex-col items-center justify-center'>
+      {alert && (
+              <Alert message={alert.message} type={alert.type} />
+            )}
       <Navbar />
       <div className='mt-16'>
         <FormContainer

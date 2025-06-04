@@ -3,6 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStudent } from '../store/StudentSlice/getStudentSlice';
 
 // Enhanced AICore component with darker aesthetics
 const AICore = ({ activeSector }) => {
@@ -313,6 +315,14 @@ const TechSectorSphere = () => {
   const containerRef = useRef();
   const [activeSector, setActiveSector] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(()=>{
+    if(localStorage.getItem("HomeRefresh")){
+      localStorage.removeItem("HomeRefresh")
+      location.reload();
+    }
+  },[])
+
 
 
   // Modified sectors with darker colors and sexy visual appeal

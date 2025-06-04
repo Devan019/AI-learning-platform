@@ -58,7 +58,7 @@ function Nav({ className }) {
                   <HoveredLink to="/chatbot" setActive={setActive} active={active} item="chatbot">
                     Chatbot
                   </HoveredLink>
-                  <HoveredLink to="/interest" setActive={setActive} active={active} item="started">
+                  <HoveredLink to="/profile" setActive={setActive} active={active} item="started">
                     Profile
                   </HoveredLink>
                   

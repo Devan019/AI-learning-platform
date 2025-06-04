@@ -3,10 +3,11 @@ import Input from '../Components/ui/input';
 import Label from '../Components/ui/label';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Alert from '../Components/ui/message';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ 
+  const [formData, setFormData] = useState({
     email: '',
     newPassword: '',
     rePassword: '',
@@ -15,6 +16,7 @@ const ForgotPassword = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const resetToken = searchParams.get("resetToken");
+  const [alert, setalert] = useState(null)
 
   const setData = async () => {
     console.log(resetToken)
@@ -45,9 +47,9 @@ const ForgotPassword = () => {
       await axios.post(`${import.meta.env.VITE_API}/auth/changePassword`, {
         email: formData.email,
         password: formData.newPassword,
-        resetToken : resetToken
-      },{withCredentials:true});
-      alert('Password reset successful!');
+        resetToken: resetToken
+      }, { withCredentials: true });
+      setalert({ message: 'Password reset successful!', type: "success" });
       navigate('/login');
     } catch (error) {
       setError('Failed to reset password');
@@ -58,14 +60,17 @@ const ForgotPassword = () => {
     await setData();
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     main()
   }, [])
 
   return (
     <div className='bg-zinc-900 min-h-screen flex flex-col items-center justify-center'>
+      {alert && (
+        <Alert message={alert.message} type={alert.type} />
+      )}
       <FormContainer title='Reset Password' handleSubmit={handleSubmit}>
-      
+
         <LabelInputContainer>
           <Label>Email</Label>
           <Input id='email' value={formData.email} readOnly className='bg-gray-800' />
