@@ -50,6 +50,8 @@ public class AuthController {
     @GetMapping("/user")
     public Object getCurrentUser(HttpSession httpSession){
 //        System.out.println("in home");
+        System.out.println("Session ID: " + httpSession.getId());
+        System.out.println("User attr: " + httpSession.getAttribute("user"));
         return httpSession.getAttribute("user");
     }
 

@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudent } from '../store/StudentSlice/getStudentSlice';
 import { fetchUser } from '../store/UserStore/setUserSlice';
+import axios from 'axios';
 
 // Enhanced AICore component with darker aesthetics
 const AICore = ({ activeSector }) => {
@@ -318,11 +319,19 @@ const TechSectorSphere = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const dispatch = useDispatch();
 
+
+  const fetchUsers = async() => {
+    const api = await axios.get(`${import.meta.env.VITE_API}/auth/users`);
+    console.log(api.data)
+  }
+
   useEffect(()=>{
     if(localStorage.getItem("HomeRefresh")){
       localStorage.removeItem("HomeRefresh")
       location.reload();
     }
+    fetchUsers()
+
 
     dispatch(fetchUser())
     
