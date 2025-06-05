@@ -33,7 +33,7 @@ const Login = () => {
   const callForgotPassword = async () => {
     setloading("");
     const token = await genrateToken();
-    const template = resetPasswordEmailTemplate(formData.email, token);
+    const template = resetPasswordEmailTemplate(formData.email, token,import.meta.env.VITE_MAIL_REDIRECT || "http://localhost:3000");
     const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`, {
       recipient: formData.email,
       msgBody: template,

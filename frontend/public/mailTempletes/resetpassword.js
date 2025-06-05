@@ -1,4 +1,4 @@
-export const resetPasswordEmailTemplate = (email, token) => {
+export const resetPasswordEmailTemplate = (email, token,link) => {
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -126,7 +126,7 @@ export const resetPasswordEmailTemplate = (email, token) => {
                 This link will expire in 30 minutes for your security.
             </p>
             
-            <a href="http://localhost:5173/resetpassword?resetToken=${token}" class="cta-button">
+            <a href="${link}/resetpassword?resetToken=${token}" class="cta-button">
                 Reset Password
             </a>
             
@@ -135,7 +135,7 @@ export const resetPasswordEmailTemplate = (email, token) => {
             </p>
             
             <div class="support">
-                Need help? <a href="mailto:support@example.com">Contact our support team</a>
+                Need help? <a href="devanchauhan012@gmail.com">Contact our support team</a>
             </div>
             
             <div class="footer">

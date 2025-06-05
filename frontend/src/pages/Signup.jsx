@@ -32,7 +32,7 @@ const Signup = () => {
   }
 
   async function sendSignupMail(){
-    const signupTemlate = signupEmailTemplate(formData.fullName, formData.email, "http://localhost:5173");
+    const signupTemlate = signupEmailTemplate(formData.fullName, formData.email, import.meta.env.VITE_MAIL_REDIRECT || "http://localhost:5173");
     const api = await axios.post(`${import.meta.env.VITE_API}/sendMail`,{
       recipient : formData.email,
       msgBody : signupTemlate,
