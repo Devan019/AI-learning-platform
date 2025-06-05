@@ -320,18 +320,11 @@ const TechSectorSphere = () => {
   const dispatch = useDispatch();
 
 
-  const fetchUsers = async() => {
-    const api = await axios.get(`${import.meta.env.VITE_API}/auth/users`);
-    console.log(api.data)
-  }
-
   useEffect(()=>{
     if(localStorage.getItem("HomeRefresh")){
       localStorage.removeItem("HomeRefresh")
       location.reload();
     }
-    fetchUsers()
-
 
     dispatch(fetchUser())
     
