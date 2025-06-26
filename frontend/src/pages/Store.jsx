@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BackgroundBeams } from "../Components/ui/bg-beams";
 import { Navbar } from "../Components/Nav";
 import missionsWithRewards from "../data/mission.data.json";
+import { AdminLink } from "../Components/AdminLink";
 
 const coinRewards = [
   { name: "🎽 T-Shirt", price: 5000 },
@@ -16,6 +17,7 @@ export function Store() {
   return (
     <div className="w-full min-h-screen bg-[#0d0d0d] relative flex flex-col items-center antialiased">
       <Navbar />
+      <AdminLink />
       <div className="mt-16 max-w-5xl mx-auto p-6">
         {/* Store Title */}
         <h2 className="text-white text-4xl font-extrabold text-center mb-10 tracking-wide">

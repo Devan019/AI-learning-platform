@@ -5,8 +5,9 @@ import Input from '../Components/ui/input'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Loader } from 'lucide-react'
-import { signupEmailTemplate } from '../../public/mailTempletes/signup'
+import { signupEmailTemplate } from '../helper/mailTempletes/signup'
 import Alert from '../Components/ui/message'
+import { AdminLink } from '../Components/AdminLink'
 
 const Signup = () => {
   const [loading, setloading] = useState("hidden")
@@ -79,6 +80,7 @@ const Signup = () => {
               <Alert message={alert.message} type={alert.type} />
             )}
       <Navbar />
+      <AdminLink />
       <div className='mt-16'>
         <FormContainer
           loading={loading}

@@ -1,10 +1,10 @@
 package com.ai.AI_Learning_Platform.model;
 
+import com.ai.AI_Learning_Platform.model.Enums.ChatFrom;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.UUID;
 
 
 @Embeddable

@@ -1,6 +1,7 @@
 package com.ai.AI_Learning_Platform.model;
 
 
+import com.ai.AI_Learning_Platform.model.Enums.Level;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +37,8 @@ public class Course {
     @ToString.Exclude
     private User user;
 
-    private String level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
 
     @JsonProperty("createdByAI")
     private Boolean createdByAI;

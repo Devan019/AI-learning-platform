@@ -1,5 +1,6 @@
 package com.ai.AI_Learning_Platform.model;
 
+import com.ai.AI_Learning_Platform.model.Enums.Level;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,5 +28,7 @@ public class Quiz {
     private Course course;
 
     private int score;
-    private String userLevel;
+
+    @Enumerated(EnumType.STRING)
+    private Level userLevel;
 }

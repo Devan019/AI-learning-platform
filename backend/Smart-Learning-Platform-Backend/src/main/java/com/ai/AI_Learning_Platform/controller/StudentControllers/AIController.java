@@ -1,6 +1,7 @@
 package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
 import com.ai.AI_Learning_Platform.model.*;
+import com.ai.AI_Learning_Platform.model.Enums.Level;
 import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
@@ -29,9 +30,9 @@ class GenCourse {
     private String courseLevel;
 }
 
+
 @RestController
 @RequestMapping("/api/gemini")
-//@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 public class AIController {
 
     @Autowired
@@ -85,7 +86,7 @@ public class AIController {
             Course newCourse = new Course();
             newCourse.setTitle(courseJson.getString("title"));
             newCourse.setDescription(courseJson.getString("description"));
-            newCourse.setLevel(courseJson.getString("level"));
+            newCourse.setLevel(courseJson.getEnum ( Level.class, "level"));
             newCourse.setCreatedByAI(true);
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -124,8 +125,6 @@ public class AIController {
             return ResponseEntity.internalServerError().body("{\"error\": \"An unexpected error occurred\"}");
         }
     }
-
-
 
 
     @GetMapping("/quiz")

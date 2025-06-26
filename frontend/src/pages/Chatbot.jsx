@@ -7,6 +7,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import ChatHistory from "../Components/ChatHistory";
 import ReactMarkDown from "react-markdown"
+import { AdminLink } from "../Components/AdminLink";
 const Chatbot = () => {
   const [activeChat, setActiveChat] = useState("New Conversation");
   const [allChats, setAllChats] = useState([]);
@@ -230,6 +231,7 @@ const Chatbot = () => {
   return (
     <div className="bg-black h-screen flex flex-col items-center justify-center relative overflow-hidden">
       <Navbar />
+      <AdminLink />
       <BackgroundLines className="bg-black absolute inset-0" />
 
       <div className="z-20 w-full max-w-6xl h-[80vh] flex relative mt-16">

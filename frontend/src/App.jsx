@@ -20,6 +20,7 @@ import AdminLogin from "./pages/AdminLogin"
 import AdminProtect from "./Protect/AdminProtect"
 import AI3D from "./pages/HomeUse3d"
 import AppLoader from "./pages/HomeWithLoader"
+import Dashboard from "./pages/Dashboard"
 
 
 const App = () => {
@@ -52,7 +53,7 @@ const App = () => {
     <Route path="/course/:courseid/quiz" element={<Quiz /> } />
     <Route path="/interest" element={<AIForm />} />
     <Route path="/upgrade" element = {<UpgradePage />} />
-    <Route path="/profile" element = {<ProfilePage />} />
+    <Route path="/profile" element = {<Dashboard />} />
     <Route path="/login" element = {<Login/>} />
     <Route path="/logout" element = {<Logout/>} />
     <Route path="resetpassword" element = {<ForgotPassword />} />

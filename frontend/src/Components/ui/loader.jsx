@@ -33,7 +33,7 @@ const Loader = () => {
           animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.1, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          AI is Generating Courses {dots}
+          AI is Generating Course {dots}
         </motion.span>
       </motion.h1>
     </div>

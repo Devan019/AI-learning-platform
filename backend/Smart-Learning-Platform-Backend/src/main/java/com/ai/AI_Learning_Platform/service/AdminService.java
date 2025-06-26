@@ -1,12 +1,11 @@
 package com.ai.AI_Learning_Platform.service;
 
 import com.ai.AI_Learning_Platform.model.Admin;
-import com.ai.AI_Learning_Platform.model.Role;
+import com.ai.AI_Learning_Platform.model.Enums.Role;
 import com.ai.AI_Learning_Platform.model.User;
 import com.ai.AI_Learning_Platform.repository.AdminRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

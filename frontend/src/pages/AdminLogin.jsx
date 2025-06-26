@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FiMail, FiLock, FiKey, FiArrowRight, FiHome } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { otpEmailTemplate } from '../../public/mailTempletes/sendotp';
+import { otpEmailTemplate } from '../helper/mailTempletes/sendotp';
 import Alert from '../Components/ui/message';
 
 const AdminLogin = () => {

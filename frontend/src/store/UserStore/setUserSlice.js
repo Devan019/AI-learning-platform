@@ -11,8 +11,15 @@ export const fetchUser = createAsyncThunk("/getUser/fetchUser", async () => {
       },
       withCredentials: true,
     });
-    console.log("Response data:", api.data);
-    return api.data;
+
+    const data = api.data;
+    if (!data) {
+      localStorage.removeItem("login");
+      localStorage.removeItem("adminlogin");
+      window.location.href = "/login";
+      throw new Error("No user data found");
+    }
+    return data;
   } catch (err) {
     console.error("Fetch user failed:", err);
     throw err;

@@ -4,6 +4,7 @@ import { Navbar } from "../Components/Nav";
 import { motion, AnimatePresence } from "framer-motion";
 import { forwardRef } from "react";
 import { TracingBeam } from "../Components/ui/trace";
+import { AdminLink } from "../Components/AdminLink";
 
 
 const Roadmap = () => {
@@ -45,8 +46,9 @@ const Roadmap = () => {
   return (
     <div className="bg-black min-h-screen text-gray-200">
       <Navbar />
-      <div className="mt-16 max-w-5xl mx-auto p-8">
-        <h1 className="text-5xl font-extrabold mb-8 text-center text-white">
+      <AdminLink />
+      <div className=" max-w-5xl mx-auto p-8">
+        <h1 className="mt-16 text-5xl font-extrabold mb-8 text-center text-white">
           🚀 IT Roadmaps
         </h1>
         <motion.div className="space-y-6">

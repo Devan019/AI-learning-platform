@@ -7,8 +7,9 @@ import axios from 'axios'
 import { Loader } from 'lucide-react'
 import { useDispatch } from 'react-redux'
 import { setuserdata } from '../store/UserStore/setUserSlice'
-import { resetPasswordEmailTemplate } from '../../public/mailTempletes/resetpassword'
 import Alert from '../Components/ui/message'
+import { resetPasswordEmailTemplate } from '../helper/mailTempletes/resetpassword'
+import { AdminLink } from '../Components/AdminLink'
 
 const Login = () => {
   const [loading, setloading] = useState("hidden")
@@ -110,8 +111,9 @@ const Login = () => {
     main();
   };
   return (
-    <div className='bg-zinc-900 min-h-screen flex flex-col items-center justify-center'>
+    <div className='bg-black min-h-screen flex flex-col items-center justify-center'>
       <Navbar />
+      <AdminLink />
       {alert && (
         <Alert message={alert.message} type={alert.type} />
       )}
@@ -193,6 +195,8 @@ const FormContainer = ({ title, handleSubmit, children, loading }) => (
       </h2>
       <div className="h-1 w-10 bg-purple-500 rounded-full ml-3"></div>
     </div>
+    <a href={`${import.meta.env.VITE_API}/google/oauth`}>Google</a>
+
     <form className="space-y-6" onSubmit={handleSubmit}>
       {children}
     </form>

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { HoveredLink, Menu } from "./ui/nav-bar";
 import { cn } from "../lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export function Navbar() {
   return (
-    <div className="fixed w-full top-0 z-50 bg-black backdrop-blur-sm border-b border-zinc-800">
+    <div className="fixed w-full top-4 z-50 bg-transparent backdrop-blur-sm  ">
       <Nav />
     </div>
   );
@@ -18,6 +18,7 @@ function Nav({ className }) {
   const { student } = useSelector((state) => state.getStudent);
   const [active, setActive] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,7 +37,7 @@ function Nav({ className }) {
         {/* Logo */}
         <div className="flex-shrink-0">
           <Link to="/" className="text-white font-bold text-xl">
-            <img src="/logo" alt="logo" className="h-8" />
+            <img src="/logo2.png" alt="logo" className="h-32" />
           </Link>
         </div>
 
@@ -49,18 +50,16 @@ function Nav({ className }) {
               </HoveredLink>
               {isLogin ? (
                 <>
-                  <a className="text-white hover:text-gray-400 hover:cursor-pointer" href="/courses" >
+                  <HoveredLink className="text-white hover:text-gray-400 hover:cursor-pointer" to="/courses" >
                     Courses
-                  </a>
+                  </HoveredLink>
                   <HoveredLink to="/roadmap" setActive={setActive} active={active} item="roadmaps">
                     Roadmaps
                   </HoveredLink>
                   <HoveredLink to="/chatbot" setActive={setActive} active={active} item="chatbot">
                     Chatbot
                   </HoveredLink>
-                  <HoveredLink to="/profile" setActive={setActive} active={active} item="started">
-                    Profile
-                  </HoveredLink>
+                  
                   
                   <HoveredLink to="/upgrade" setActive={setActive} active={active} item="started">
                     Upgrade
@@ -79,14 +78,21 @@ function Nav({ className }) {
 
           {/* User Profile & Credits (Desktop) */}
           {isLogin && (
-            <div className="flex items-center gap-4 ml-4">
+            <div 
+            
+            className="flex items-center gap-4 ml-4">
               <div className="relative">
                 <div className="px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full shadow-lg text-white font-medium flex items-center text-sm">
                   <span className="mr-1">🎫</span>
                   <span>{student?.credits || 0}</span>
                 </div>
               </div>
-              <div className="flex flex-col items-center">
+              <div
+               onClick={
+                () => (navigate("/profile"))
+               }
+               title="Profile"
+               className="hover:cursor-pointer flex flex-col items-center">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold shadow-lg">
                   {student?.fullName?.charAt(0).toUpperCase() || 'U'}
                 </div>
@@ -98,7 +104,9 @@ function Nav({ className }) {
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center">
           {student && isLogin && (
-            <div className="flex items-center gap-2 mr-4">
+            <div
+              onClick={() => navigate("/profile")}
+              className="hover:cursor-pointer flex items-center gap-2 mr-4">
               <div className="px-2 py-1 bg-indigo-600 rounded-full text-white text-xs font-bold">
                 {student.credits || 0} 🎫
               </div>
@@ -127,9 +135,9 @@ function Nav({ className }) {
               </HoveredLink>
               {isLogin ? (
                 <>
-                  <a className="text-white hover:text-gray-400 hover:cursor-pointer" href="/courses" >
+                  <HoveredLink className="text-white hover:text-gray-400 hover:cursor-pointer" to="/courses" >
                     Courses
-                  </a>
+                  </HoveredLink>
                   <HoveredLink to="/roadmap" setActive={setActive} active={active} item="roadmaps">
                     Roadmaps
                   </HoveredLink>
@@ -142,9 +150,7 @@ function Nav({ className }) {
                   <HoveredLink to="/upgrade" setActive={setActive} active={active} item="started">
                     Upgrade
                   </HoveredLink>
-                  <HoveredLink to="/profile" setActive={setActive} active={active} item="started">
-                    Profile
-                  </HoveredLink>
+                 
                   <HoveredLink to="/logout" setActive={setActive} active={active} item="store">
                     Logout
                   </HoveredLink>

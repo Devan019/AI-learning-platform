@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { fetchStudent } from "../store/StudentSlice/getStudentSlice";
 import { toast } from "react-toastify";
+import { AdminLink } from "../Components/AdminLink";
 
 const CreditCard = React.memo(({
   title,
@@ -225,12 +226,13 @@ const UpgradePage = () => {
   }
 
   return (
-    <div className="mt-16 min-h-screen bg-black">
+    <div className="min-h-screen bg-black">
       <Navbar />
-      <div className="container mx-auto px-4 ">
-        <h1 className="relative top-2 text-3xl font-bold text-center text-white mb-4">Upgrade Your Learning</h1>
+      <AdminLink />
+      <div className=" mx-auto px-4 ">
+        <h1 className="relative top-24 text-3xl font-bold text-center text-white ">Upgrade Your Learning</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-32">
           {creditPacks.map((pack, index) => (
             <CreditCard
               key={index}

@@ -9,10 +9,13 @@ import com.ai.AI_Learning_Platform.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -47,11 +50,26 @@ public class AuthController {
         return userService.isVaildUser(user, httpSession);
     }
 
+    @GetMapping("/profile")
+    public Map<String, Object> getUserDetails(Principal principal) {
+        if (principal instanceof OAuth2User oauth2User) {
+            System.out.println ( oauth2User.getAttributes());
+            return oauth2User.getAttributes();
+        }
+        return Map.of("error", "Not authenticated");
+    }
+
+
+
     //using
     @GetMapping("/user")
     @Transactional
-    public Object getCurrentUser(HttpSession httpSession){
+    public Object getCurrentUser(HttpSession httpSession, Principal principal){
         System.out.println("Session ID: " + httpSession.getId());
+        if (principal instanceof OAuth2User oauth2User) {
+            System.out.println ( oauth2User.getAttributes());
+            return oauth2User.getAttributes();
+        }
         return httpSession.getAttribute("user");
     }
 

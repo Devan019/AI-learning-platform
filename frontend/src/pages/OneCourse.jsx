@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Navbar } from "../Components/Nav";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { AdminLink } from "../Components/AdminLink";
 
 
 const OneCourse = () => {
@@ -123,6 +124,7 @@ const OneCourse = () => {
   return (
     <div className="bg-black min-h-screen flex flex-col items-center text-white">
       <Navbar />
+      <AdminLink />
       <div className="w-3/5 mt-26">
         <h1 className="text-4xl font-bold text-center">
           📚 {course.title} 🎯

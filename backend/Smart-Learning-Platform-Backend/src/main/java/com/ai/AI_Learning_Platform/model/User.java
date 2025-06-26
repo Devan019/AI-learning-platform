@@ -1,6 +1,6 @@
 package com.ai.AI_Learning_Platform.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ai.AI_Learning_Platform.model.Enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

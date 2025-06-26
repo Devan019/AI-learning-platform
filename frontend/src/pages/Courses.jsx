@@ -10,6 +10,8 @@ import Loader from "../Components/ui/loader";
 import { Trash2 } from "lucide-react";
 import Alert from "../Components/ui/message";
 import { fetchStudent } from "../store/StudentSlice/getStudentSlice";
+import { AdminLink } from "../Components/AdminLink";
+import CommonLoader from "../Components/CommonLoader";
 
 const Courses = () => {
   const [courseName, setCourseName] = useState("");
@@ -22,11 +24,11 @@ const Courses = () => {
   const [loading, setLoading] = useState(false);
   const [isPremiumUser, setisPremiumUser] = useState("");
   const [alert, setAlert] = useState(null);
+  const [courseLoading, setCourseLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function getCourses(id) {
-    console.log(id , " in get function");
     try {
       const api = await axios.get(`${import.meta.env.VITE_API}/courses/user/${id}`, { withCredentials: true });
       return api.data;
@@ -45,7 +47,6 @@ const Courses = () => {
 
 
     if (id && student) {
-      // dispatch(fetchStudent(id))
       setisPremiumUser(student?.order_id)
       const fetchData = async () => {
         setLoading(true);
@@ -75,7 +76,7 @@ const Courses = () => {
 
   async function generateCourseAndSaved(id) {
     try {
-      setLoading(true);
+      setCourseLoading(true);
       const api = await axios.post(
         `${import.meta.env.VITE_API}/gemini/course/user/${id}`,
         { courseLevel, courseName }, { withCredentials: true }
@@ -92,7 +93,7 @@ const Courses = () => {
       console.error("Error generating course:", error);
       throw error;
     } finally {
-      setLoading(false);
+      setCourseLoading(false);
     }
   }
 
@@ -193,7 +194,9 @@ const Courses = () => {
   return (
     <div className="dark:bg-black bg-gray-100 min-h-screen flex flex-col items-center py-10">
       <Navbar />
-      {loading && <Loader />}
+      <AdminLink />
+      {courseLoading && <Loader />}
+      {loading && <CommonLoader />}
       {alert && (
         <Alert message={alert.message} type={alert.type} />
       )}
@@ -264,7 +267,7 @@ const Courses = () => {
 
       {loading ? (
         <div className="mt-12">
-          <Loader />
+          <CommonLoader />
         </div>
       ) : (
         <motion.div
@@ -292,7 +295,7 @@ const Courses = () => {
                     >
                       <button
                         onClick={(e) => handleDelete(course.id, e)}
-                        className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors z-50"
+                        className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors z-10"
                         aria-label="Delete course"
                       >
                         <Trash2 size={18} />

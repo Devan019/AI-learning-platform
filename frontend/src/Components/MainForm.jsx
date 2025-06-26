@@ -17,11 +17,11 @@ export function Interest() {
   const [filteredSkills, setFilteredSkills] = useState([]);
   const [skillsInputValue, setSkillsInputValue] = useState("");
   const [passworderror, setpassworderror] = useState("")
-  const {id,email}  = useSelector((state)=>state.getUser);
-  const {student} = useSelector((state) => state.getStudent)
+  const { id, email } = useSelector((state) => state.getUser);
+  const { student } = useSelector((state) => state.getStudent)
   const [alert, setalert] = useState(null)
 
-  
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -36,48 +36,48 @@ export function Interest() {
     researchInterests: "",
     careerGoals: "",
     tags: [],
-    phone : '',
-    id : null
+    phone: '',
+    id: null
   });
-  
-  useEffect(()=>{
-    if(id){
-      setFormData((prev)=>{
+
+  useEffect(() => {
+    if (id) {
+      setFormData((prev) => {
         return {
           ...prev,
-          id : id
+          id: id
         }
       })
       console.log("in if")
     }
   }, [id])
   function setDataOfUser() {
-      const user = student;
-      console.log(user.technicalSkills)
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        fullName: user.fullName || "",
-        email: user.email || "",
-        degreeProgram: user.degreeProgram || "",
-        mainInterest: user.mainInterest || "",
-        university: user.university || "",
-        technicalSkills: user.technicalSkills || [],
-        domainExpertise: user.domainExpertise || [],
-        graduationYear: user.graduationYear || "",
-        gpaScore: user.gpaScore || "",
-        extracurricularActivities: user.extracurricularActivities || "",
-        researchInterests: user.researchInterests || "",
-        careerGoals: user.careerGoals || "",
-        phone : user.phone || ""
-      }));
+    const user = student;
+    console.log(user.technicalSkills)
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      fullName: user.fullName || "",
+      email: user.email || "",
+      degreeProgram: user.degreeProgram || "",
+      mainInterest: user.mainInterest || "",
+      university: user.university || "",
+      technicalSkills: user.technicalSkills || [],
+      domainExpertise: user.domainExpertise || [],
+      graduationYear: user.graduationYear || "",
+      gpaScore: user.gpaScore || "",
+      extracurricularActivities: user.extracurricularActivities || "",
+      researchInterests: user.researchInterests || "",
+      careerGoals: user.careerGoals || "",
+      phone: user.phone || ""
+    }));
   }
-  
+
 
 
   async function updateUser() {
-    console.log("create user",  formData);
-    const api = await axios.post(`${import.meta.env.VITE_API}/users`, formData,{withCredentials:true});
-    
+    console.log("create user", formData);
+    const api = await axios.post(`${import.meta.env.VITE_API}/users`, formData, { withCredentials: true });
+
     console.log(api.data);
     return api.data.id;
   }
@@ -85,14 +85,14 @@ export function Interest() {
 
   async function main() {
     setloading("");
-     await updateUser();
+    await updateUser();
     setloading("hidden");
     navigate("/profile");
   }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    
+
   };
 
   const handleSkillInput = (e) => {
@@ -101,8 +101,8 @@ export function Interest() {
     setFilteredSkills(
       value.trim() !== ""
         ? skillsopts.filter((skill) =>
-            skill.toLowerCase().includes(value.toLowerCase())
-          )
+          skill.toLowerCase().includes(value.toLowerCase())
+        )
         : []
     );
   };
@@ -139,36 +139,36 @@ export function Interest() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.technicalSkills.length === 0) {
-      setalert({message :"Please add at least one skill", type: "warning"});
+      setalert({ message: "Please add at least one skill", type: "warning" });
       return;
     }
     if (formData.domainExpertise.length === 0) {
-      setalert({message:"Please select at least one domain", type:"warning"});
+      setalert({ message: "Please select at least one domain", type: "warning" });
       return;
     }
 
-    if(formData.password != formData.repassword){
+    if (formData.password != formData.repassword) {
       setpassworderror("password should match")
     }
 
     main();
   };
-  useEffect(()=>{
-    if(id && student){
+  useEffect(() => {
+    if (id && student) {
       setDataOfUser();
     }
   }, [id, student])
 
   return (
     <FormContainer
-    loading={loading}
+      loading={loading}
       title="Student Profile & Interests"
       handleSubmit={handleSubmit}
     >
       {alert && (
-              <Alert message={alert.message} type={alert.type} />
-            )}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Alert message={alert.message} type={alert.type} />
+      )}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         <LabelInputContainer>
           <Label htmlFor="name">
             Full Name <span className="text-red-500">*</span>
@@ -181,7 +181,7 @@ export function Interest() {
             type="text"
             placeholder="Enter your name"
             className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
-            
+
           />
         </LabelInputContainer>
         <LabelInputContainer>
@@ -211,13 +211,13 @@ export function Interest() {
             className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
           />
         </LabelInputContainer>
-       
-        
+
+
       </div>
       <div className="error text-red-600">{passworderror}</div>
       <hr />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <LabelInputContainer>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+        <LabelInputContainer>
           <Label htmlFor="degree">
             Degree Program <span className="text-red-500">*</span>
           </Label>
@@ -265,71 +265,103 @@ export function Interest() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <LabelInputContainer>
-          <Label htmlFor="skills">
-            Technical Skills <span className="text-red-500">*</span>
-          </Label>
-          <div
-            className={`border border-gray-700 bg-gray-800 rounded-lg p-3 flex flex-wrap gap-2 relative group transition-all duration-300 hover:border-purple-500 ${
-              formData.technicalSkills.length === 0 ? "border-red-500" : ""
-            }`}
-          >
-            {formData.technicalSkills.map((skill, index) => (
-              <span
-                key={index}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full flex items-center text-sm"
-              >
-                {skill}
-                <button
-                  onClick={() => removeTag(index)}
-                  className="ml-2 text-xs bg-gray-800 rounded-full h-4 w-4 flex items-center justify-center hover:bg-gray-700"
-                  type="button"
+        <div>
+          <LabelInputContainer>
+            <Label htmlFor="skills">
+              Technical Skills <span className="text-red-500">*</span>
+            </Label>
+            <div
+              className={`border border-gray-700 bg-gray-800 rounded-lg p-3 flex flex-wrap gap-2 relative group transition-all duration-300 hover:border-purple-500 ${formData.technicalSkills.length === 0 ? "border-red-500" : ""
+                }`}
+            >
+              {formData.technicalSkills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full flex items-center text-sm"
                 >
-                  x
-                </button>
-              </span>
-            ))}
-            <input
-              id="technicalSkills"
-              type="text"
-              value={skillsInputValue}
-              onChange={handleSkillInput}
-              className="bg-transparent outline-none flex-grow min-w-20 px-2 py-1 text-white placeholder-gray-400"
-              placeholder={
-                formData.technicalSkills.length
-                  ? ""
-                  : "Add your technical skills..."
-              }
-            />
-            {filteredSkills.length > 0 && (
-              <div className="absolute top-full left-0 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-48 overflow-y-auto z-50">
-                {filteredSkills.map((skill, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSkillAdd(skill)}
-                    className="p-2 cursor-pointer hover:bg-gray-700 text-white transition-colors"
+                  {skill}
+                  <button
+                    onClick={() => removeTag(index)}
+                    className="ml-2 text-xs bg-gray-800 rounded-full h-4 w-4 flex items-center justify-center hover:bg-gray-700"
+                    type="button"
                   >
-                    {skill}
-                  </div>
-                ))}
-              </div>
+                    x
+                  </button>
+                </span>
+              ))}
+              <input
+                id="technicalSkills"
+                type="text"
+                value={skillsInputValue}
+                onChange={handleSkillInput}
+                className="bg-transparent outline-none flex-grow min-w-20 px-2 py-1 text-white placeholder-gray-400"
+                placeholder={
+                  formData.technicalSkills.length
+                    ? ""
+                    : "Add your technical skills..."
+                }
+              />
+              {filteredSkills.length > 0 && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-48 overflow-y-auto z-50">
+                  {filteredSkills.map((skill, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleSkillAdd(skill)}
+                      className="p-2 cursor-pointer hover:bg-gray-700 text-white transition-colors"
+                    >
+                      {skill}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {formData.technicalSkills.length === 0 && (
+              <p className="text-xs text-red-500 mt-1">
+                At least one skill is required
+              </p>
             )}
-          </div>
-          {formData.technicalSkills.length === 0 && (
-            <p className="text-xs text-red-500 mt-1">
-              At least one skill is required
-            </p>
-          )}
-        </LabelInputContainer>
+          </LabelInputContainer>
+
+          <LabelInputContainer>
+            <Label htmlFor="graduationYear">
+              Graduation Year <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              name="graduationYear"
+              id="graduationYear"
+              value={formData.graduationYear}
+              onChange={handleChange}
+              type="text"
+              placeholder="Expected year of graduation"
+              className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
+              required
+            />
+          </LabelInputContainer>
+
+          <LabelInputContainer>
+            <Label htmlFor="gpa">
+              GPA / Score <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              name="gpaScore"
+              id="gpaScore"
+              value={formData.gpaScore}
+              onChange={handleChange}
+              type="text"
+              placeholder="Your current GPA or score"
+              className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
+              required
+            />
+          </LabelInputContainer>
+        </div>
 
         <LabelInputContainer>
           <Label htmlFor="domains">
             Domain Expertise <span className="text-red-500">*</span>
           </Label>
           <div
-            className={`border border-gray-700 bg-gray-800 rounded-lg p-3 relative transition-all duration-300 hover:border-purple-500 ${
-              formData.domainExpertise.length === 0 ? "border-red-500" : ""
-            }`}
+            className={`border border-gray-700 bg-gray-800 rounded-lg p-3 relative transition-all duration-300 hover:border-purple-500 ${formData.domainExpertise.length === 0 ? "border-red-500" : ""
+              }`}
           >
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 max-h-48 overflow-y-auto pr-2">
               {domainopts.map((domain, index) => (
@@ -369,42 +401,11 @@ export function Interest() {
             </div>
           )}
         </LabelInputContainer>
+
+
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <LabelInputContainer>
-          <Label htmlFor="graduationYear">
-            Graduation Year <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            name="graduationYear"
-            id="graduationYear"
-            value={formData.graduationYear}
-            onChange={handleChange}
-            type="text"
-            placeholder="Expected year of graduation"
-            className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
-            required
-          />
-        </LabelInputContainer>
-        <LabelInputContainer>
-          <Label htmlFor="gpa">
-            GPA / Score <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            name="gpaScore"
-            id="gpaScore"
-            value={formData.gpaScore}
-            onChange={handleChange}
-            type="text"
-            placeholder="Your current GPA or score"
-            className="border-transparent bg-gray-800 focus:border-purple-500 transition-all duration-300"
-            required
-          />
-        </LabelInputContainer>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 mt-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         <LabelInputContainer>
           <Label htmlFor="extracurriculars">
             Extracurricular Activities <span className="text-red-500">*</span>
@@ -420,6 +421,8 @@ export function Interest() {
             required
           />
         </LabelInputContainer>
+     
+
 
         <LabelInputContainer>
           <Label htmlFor="researchTopics">

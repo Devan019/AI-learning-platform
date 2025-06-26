@@ -2,6 +2,7 @@ package com.ai.AI_Learning_Platform.service;
 
 
 import com.ai.AI_Learning_Platform.model.*;
+import com.ai.AI_Learning_Platform.model.Enums.Role;
 import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
@@ -58,7 +59,7 @@ public class UserService {
         student.setChatBot(student2.getChatBot());
         student.setId(user.getId());
         student.setCourses(courses);
-        student.setRole(Role.STUDENT);
+        student.setRole( Role.STUDENT);
         student.setEmail(user.getEmail());
         student.setPassword(user.getPassword());
 //        System.out.println(" no of " +  student);

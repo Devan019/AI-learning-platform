@@ -1,6 +1,7 @@
 package com.ai.AI_Learning_Platform.Configs;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -43,6 +44,7 @@ public class security {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return http
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
@@ -53,6 +55,10 @@ public class security {
                 .sessionManagement(session ->
                         session
                                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/api/google/oauth")
+                        .defaultSuccessUrl(allowed_url , true)
                 )
                 .build();
     }
