@@ -16,7 +16,6 @@ export const fetchUser = createAsyncThunk("/getUser/fetchUser", async () => {
     if (!data) {
       localStorage.removeItem("login");
       localStorage.removeItem("adminlogin");
-      window.location.href = "/login";
       throw new Error("No user data found");
     }
     return data;

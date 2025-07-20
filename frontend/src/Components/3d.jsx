@@ -321,7 +321,21 @@ const TechSectorSphere = () => {
   const [loading, setLoading] = useState(false);
 
 
-  
+  useEffect(() => {
+    if (!user || !user._id) {
+      setLoading(true);
+      dispatch(fetchUser())
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching user:", error);
+          setLoading(false);
+          
+        });
+    }
+  }, [user])
+
 
 
   // Modified sectors with darker colors and sexy visual appeal
