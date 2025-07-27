@@ -195,7 +195,6 @@ const FormContainer = ({ title, handleSubmit, children, loading }) => (
       </h2>
       <div className="h-1 w-10 bg-purple-500 rounded-full ml-3"></div>
     </div>
-    <a href={`${import.meta.env.VITE_API}/google/oauth`}>Google</a>
 
     <form className="space-y-6" onSubmit={handleSubmit}>
       {children}
