@@ -25,7 +25,7 @@ public class ChatBot {
     //    @ElementCollection
 //    @CollectionTable(name = "topics_chats", joinColumns = @JoinColumn(name = "chat_id"))
 //    @MapKey(name = "topic")
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, List<Chat>> chats;
 
