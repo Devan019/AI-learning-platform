@@ -1,9 +1,6 @@
 package com.ai.AI_Learning_Platform.controller.StudentControllers;
 
-import com.ai.AI_Learning_Platform.model.Course;
-import com.ai.AI_Learning_Platform.model.CourseContent;
-import com.ai.AI_Learning_Platform.model.Student;
-import com.ai.AI_Learning_Platform.model.User;
+import com.ai.AI_Learning_Platform.model.*;
 import com.ai.AI_Learning_Platform.repository.CourseContentRepository;
 import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.StudentRepository;
@@ -104,13 +101,16 @@ public class CourseController {
     // Get Course by ID
     //using
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Course>> getCourseById(@PathVariable UUID id) {
-        return ResponseEntity.ok(courseService.getCourseById(id));
+    public ResponseEntity<CourseXContentDTO> getCourseById(@PathVariable UUID id) {
+        return courseService.getCourseById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
     //using
     @GetMapping("/user/{userId}")
-    public List<Course> getCoursesByUserId(@PathVariable UUID userId) {
+    public List<CourseDTO> getCoursesByUserId(@PathVariable UUID userId) {
         return courseService.getCoursesByUserId(userId);
     }
 

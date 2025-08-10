@@ -1,8 +1,6 @@
 package com.ai.AI_Learning_Platform.service;
 
-import com.ai.AI_Learning_Platform.model.Course;
-import com.ai.AI_Learning_Platform.model.CourseContent;
-import com.ai.AI_Learning_Platform.model.User;
+import com.ai.AI_Learning_Platform.model.*;
 import com.ai.AI_Learning_Platform.repository.CourseContentRepository;
 import com.ai.AI_Learning_Platform.repository.CourseRepository;
 import com.ai.AI_Learning_Platform.repository.UserRepository;
@@ -24,7 +22,7 @@ public class CourseService {
 
     // Create a new course
     @Transactional
-    public Course createCourse(Course course,UUID userId) {
+    public Course createCourse(Course course, UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -54,16 +52,41 @@ public class CourseService {
     }
 
     // Get course by ID
-    public Optional<Course> getCourseById(UUID id) {
-        return courseRepository.findById(id);
+    @Transactional
+    public Optional<CourseXContentDTO> getCourseById(UUID id) {
+        return courseRepository.findById(id)
+                .map(course -> CourseXContentDTO.builder()
+                        .id(course.getId())
+                        .title(course.getTitle())
+                        .description(course.getDescription())
+                        .level(course.getLevel().name())
+                        .createdByAI(course.getCreatedByAI())
+                        .contents(course.getContents().stream()
+                                .map(content -> ContentDTO.builder()
+                                        .id(content.getId())
+                                        .sectionTitle(content.getSectionTitle())
+                                        .body(content.getBody())
+                                        .build()
+                                ).toList()
+                        )
+                        .build());
     }
 
-    public List<Course> getCoursesByUserId(UUID userId) {
-        return courseRepository.findByUserId(userId);
+    public List<CourseDTO> getCoursesByUserId(UUID userId) {
+        List<Course> courses = courseRepository.findByUserId(userId);
+        return courses.stream().map(course -> CourseDTO.builder()
+                .id(course.getId())
+                .title(course.getTitle())
+                .description(course.getDescription())
+                .level(course.getLevel())
+                .createdByAI(course.getCreatedByAI())
+                .build()
+        ).toList();
     }
+
 
     // Update a course
-    public Course updateCourse(UUID id, UUID userId,Course updatedCourse) {
+    public Course updateCourse(UUID id, UUID userId, Course updatedCourse) {
         return courseRepository.findById(id).map(course -> {
             if (userId != null) {
                 User user = userRepository.findById(userId)
