@@ -1,12 +1,31 @@
-# Stage 1: Build the app
+# 1
 FROM maven:3.9.6-eclipse-temurin-17 AS build
+
 WORKDIR /app
-COPY . .
+
+# Copy only pom first (better caching)
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source
+COPY src ./src
+
+# Build jar
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the app
-FROM openjdk:17
+
+#2
+FROM eclipse-temurin:17-jre-alpine
+
 WORKDIR /app
+
+# Copy built jar
 COPY --from=build /app/target/*.jar app.jar
+
+# Non-root user for security
+RUN addgroup -S app && adduser -S app -G app
+USER app
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar"]
